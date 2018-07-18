@@ -1,0 +1,1 @@
+export const CHANGE_COMMENT_INPUT_FOCUS_INDEX = 'detail/change_home_article';
