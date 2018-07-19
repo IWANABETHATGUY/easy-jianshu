@@ -17,13 +17,14 @@ class CommentListItem extends Component {
     super(props);
     this.state = {
       commentBlockShow: false,
-      prefix: ''
+      prefix: '',
+      cid: null
     }
   }
   
   render() {
-    const { commentBlockShow, prefix } = this.state;
-    const { index, commentIndex } = this.props;
+    const { commentBlockShow, prefix, cid } = this.state;
+    const { index, commentIndex, comment } = this.props;
 
     return (
       <div>
@@ -31,20 +32,28 @@ class CommentListItem extends Component {
           <Avatar>
             <i className="iconfont">&#xe6a4;</i>
           </Avatar>
-          <ListItemText primary="Photos" secondary="Jan 9, 2014" />
+          <ListItemText primary={comment.pseudonym}  />
         </ListItem>
         <div style={{padding: '0 24px', margin: '10px 0'}}>
-          恭喜本文作者，本文已被由「小潘大大」主编的〖这个世界还有爱吗〗专题和〖简书文章精选集〗专题收录!期待作者创作更多的优秀作品，也期待各位围观同学的加入我们的专题。。
+          {comment.content}
         </div>
         <CommentInfo 
-          onReplyClick={this.handleFReplyClick}
-          info={{like: 18, time: '2018-08-21 18:29:22'}} 
+          bordered={false}
+          thisId={comment._id}
+          onReplyClick={this.handleFReplyClick.bind(this, comment._id)}
+          info={{like: comment.like, time: comment.meta.createdAt}} 
         />
-        <CommentReply onReplayClick={this.handleReplyClick}/>
+        <CommentReply 
+          replies={comment.commentReplyList}
+          onReplayClick={this.handleReplyClick}
+          />
         <Collapse in={commentBlockShow && (index === commentIndex)} timeout="auto" unmountOnExit>
           <CommentInput 
             commentInputCon={commentBlockShow}
-            placeholder={prefix}
+            prefix={prefix}
+            rtc={true}
+            ucid={comment.underCommentID}
+            cid={cid}
             onClickCancel={this.handleClickCancel}/>
         </Collapse>
         <Divider/>
@@ -52,21 +61,22 @@ class CommentListItem extends Component {
     );
   }
 
-  handleReplyClick = (prefix = '') => {
+  handleReplyClick = (prefix = '', cid) => {
     const { index, changeCommentFocusedIndex } = this.props;
     this.setState({
       commentBlockShow: true,
       prefix,
-      
+      cid
     })
     changeCommentFocusedIndex(index);
   }
 
-  handleFReplyClick = () => {
+  handleFReplyClick = (cid) => {
     const { index, changeCommentFocusedIndex } = this.props;
     this.setState({
       commentBlockShow: true,
-      prefix: ''
+      prefix: '',
+      cid
     })
     changeCommentFocusedIndex(index);
   }

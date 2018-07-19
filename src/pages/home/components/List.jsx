@@ -57,7 +57,7 @@ class List extends Component {
             )
           })
         }
-        <LoadMore>阅读更多</LoadMore>
+        <LoadMore>没有更多了</LoadMore>
       </div>
     );
   }

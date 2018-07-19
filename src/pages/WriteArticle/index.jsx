@@ -4,7 +4,6 @@ import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import hljs from 'highlightjs';
 import Remarkable from 'remarkable';
-import { actionCreater } from './store';
 import { 
   Button, 
   Card,
@@ -171,10 +170,17 @@ class WriteArticle extends Component {
     return result;
   };
 
+  retSummary = (content) => {
+    let element = document.createElement('div');
+    element.innerHTML = content;
+    return element.innerText;
+  }
   publishNewArticle = (markdownContent) => {
+    const summary = this.retSummary(markdownContent).slice(0, 60);
     const {pseudonym, userID} = this.props;
     axios.post(`${HOST}/article/addArticle`, {
       pseudonym,
+      summary,
       content: markdownContent,
       title: this.state.title,
       tags: [],

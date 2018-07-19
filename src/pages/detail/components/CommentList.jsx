@@ -1,4 +1,5 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
+import  { connect } from 'react-redux';
 import { 
   List,
 } from '@material-ui/core';
@@ -12,25 +13,23 @@ const styles = theme => ({
 })
 
 class CommentList extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   componentDidMount() {
   }
   
   render() {
-    const { classes } = this.props;
+    const { classes, commentList } = this.props;
     return true ? (
       <List
         className={classes.commentList}
       >
         {
-          new Array(5).fill(0).map((item, index) => {
+          commentList.map((item) => {
             return (
               <CommentListItem
-                key={index}
-                index={index}
+                key={item._id}
+                comment={item}
+                index={item._id}
                 />
             )
           })
@@ -43,5 +42,10 @@ class CommentList extends Component {
 
 }
 
+const mapStateToProps = (state) => ({
+  commentList: state.detail.commentList
+})
 
-export default withStyles(styles)(CommentList)
+export default connect(mapStateToProps, null)(
+  withStyles(styles)(CommentList)
+)

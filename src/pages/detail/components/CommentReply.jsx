@@ -1,20 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import { escape } from 'lodash';
-// import { HOST } from '../../libs/config';
 import { 
-  Divider,
   Avatar,
   List,
-  ListItem,
-  ListItemText,
-  Collapse,
-  Button
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import CommentInfo from './CommentInfo';
-import CommentInput from './CommentInput';
 
 const style = theme => ({
   commentReplyContainer: {
@@ -54,9 +46,8 @@ class CommentReply extends Component {
   }
   
   render() {
-    const { classes } = this.props;
-    const str = 'feafaewfawfaweffeawwwwwwwwwwwwfeawwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww';
-    return true ? (
+    const { classes, replies } = this.props;
+    return replies.length > 0 ? (
       <Fragment>
           <div
             className={classes.commentReplyContainer}
@@ -65,10 +56,10 @@ class CommentReply extends Component {
               className={classes.commentReplyList}
             >
               {
-                new Array(2).fill(0).map((item, index) => {
+                replies.map((item, index) => {
                   return (
                     <div
-                      key={index}
+                      key={item._id}
                     >
                       <div 
                         className={classes.replayComment}
@@ -82,16 +73,18 @@ class CommentReply extends Component {
                         <div
                           className={classes.replayCommentBox} 
                         >
-                          <a className="user-name">jack</a>
+                          <a className="user-name">{item.pseudonym}</a>
                           <span
                             className={classes.replayCommentContainer} 
-                            dangerouslySetInnerHTML={{__html: this.escapeComment(str)}}
+                            dangerouslySetInnerHTML={{__html: this.escapeComment(item.content)}}
                           ></span>
                         </div>
                       </div>
                     <CommentInfo
-                      onReplyClick={this.handleReplyClick}
-                      info={{like: 18,  time: '2018-08-21 18:29:22'}}
+                      bordered={true}
+                      thisId={item._id}
+                      onReplyClick={this.handleReplyClick.bind(this, item.pseudonym, item._id)}
+                      info={{like: item.like,  time: item.meta.createdAt}}
                     />
                   </div>
                   )
@@ -107,9 +100,9 @@ class CommentReply extends Component {
 
 
 
-  handleReplyClick = () => {
+  handleReplyClick = (name, cid) => {
     const { onReplayClick } = this.props;
-    onReplayClick('jack');
+    onReplayClick(`回复 @${name}:`, cid);
   }
   
   escapeComment = (str) => {

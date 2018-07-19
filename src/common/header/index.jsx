@@ -13,7 +13,8 @@ import {
   SearchInfoSwitch,
   SearchInfoItem,
   HeaderBox,
-  AvatorContainer
+  AvatorContainer,
+  WriteArticle
 } from './style';
 import { 
   actionCreater as headerActionCreater
@@ -49,10 +50,10 @@ class Header extends Component {
             <Logo/>
           </Link>
           <Link to="/writeArticle">
-            <Button className="write-article">
+            <WriteArticle className="write-article">
               <i className="iconfont pen">&#xe6a4;</i>
               写文章
-            </Button>
+            </WriteArticle>
           </Link>
           
           {

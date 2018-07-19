@@ -1,9 +1,12 @@
 import React, { Component, Fragment } from 'react';
+import axios from 'axios';
+import { connect } from 'react-redux';
 import { 
   TextField,
   Collapse,
   Button
 } from '@material-ui/core';
+import { HOST } from '../../../libs/config';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
@@ -31,12 +34,18 @@ class CommentInput extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      commentInputFocus: false
+      commentInputFocus: false,
+      content: ''
     }
   }
   
   render() {
-    const { classes, commentInputCon, prefix } = this.props;
+    const { 
+      classes, 
+      commentInputCon, 
+      prefix,
+      rtc
+    } = this.props;
     return (
       <Fragment>
         <TextField
@@ -45,26 +54,35 @@ class CommentInput extends Component {
           multiline
           rows="3"
           onFocus={this.handleArticleCommentChange.bind(this, true)}
-          onBlur={this.handleArticleCommentChange.bind(this, false)}
-          autoFocus={true}
+          // onBlur={this.handleArticleCommentChange.bind(this, false)}
+          autoFocus={rtc}
           placeholder={prefix}
           // className={classes.articleContent}
           margin="normal"
           fullWidth
-      // onChange={this.handleContentChange}
+          onChange={this.handleContentChange}
         />
         <Collapse in={this.state.commentInputFocus || commentInputCon } timeout="auto" unmountOnExit style={{display: 'flex', justifyContent:
           'flex-end', alignItems: 'baseline'}}>
           <Button aria-label="Delete" className={classes.button} onClick={this.handleClickCancel.bind(this, false)} size="medium">
             取消
           </Button>
-          <Button className={classes.commitComment} variant="extendedFab" aria-label="Delete" size="medium">
+          <Button 
+            className={classes.commitComment} variant="extendedFab" aria-label="Delete" size="medium"
+            onClick={this.handleClickSend}
+            >
             发送
           </Button>
         </Collapse>
       </Fragment>
       
     );
+  }
+
+  handleContentChange  = (e) => {
+    this.setState({
+      content: e.target.value
+    })
   }
 
   handleArticleCommentChange = (status) => {
@@ -74,12 +92,44 @@ class CommentInput extends Component {
   }
 
   handleClickCancel = (status) => {
+    console.log(this.state.content);
     const {onClickCancel} = this.props;
     this.setState({
       commentInputFocus: status
     })
-    onClickCancel();
+    if (onClickCancel) {
+      onClickCancel();
+    }
+  }
+
+  handleClickSend = () => {
+    const {prefix, rtc, pseudonym, articleId, userID, cid, ucid} = this.props;
+    const { content } = this.state;
+    const combineContent = prefix === undefined ? "" : prefix + content
+    axios.post(`${HOST}/comment/addComment`, {
+      pseudonym,
+      content: combineContent,
+      rtc,
+      articleId,
+      ucid,
+      cid,
+      userID
+    })
+      .then((res) => {
+        if (res.data.msg === 'success') {
+          alert('add comment success');
+        }
+      })
   }
 }
 
-export default withStyles(styles)(CommentInput);
+const mapStateToProps = (state) => ({
+  articleId: state.detail.articleId,
+  pseudonym: state.login.userInfo.pseudonym,
+  userID: state.login.userInfo.userID
+})
+
+
+export default connect(mapStateToProps, null)(
+  withStyles(styles)(CommentInput)
+);

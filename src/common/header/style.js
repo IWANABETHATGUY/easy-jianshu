@@ -153,6 +153,19 @@ export const Button = styled.a`
     background: #ec6149;
   }
 `
+export const WriteArticle = styled.div`
+  float: right;
+  margin: 9px 20px 0 0;
+  padding: 0 20px;
+  line-height: 38px;
+  border-radius: 19px;
+  border: 1px solid #ec6149;
+  font-size: 14px;
+  color: #fff;
+  background: #ec6149;
+
+`
+
 export const NavSearchWrapper = styled.div`
   position: relative;
   float: left;

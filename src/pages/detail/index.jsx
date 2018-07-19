@@ -1,9 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import { HOST } from '../../libs/config';
+import { connect } from 'react-redux';
+import Pagination from 'rc-pagination';
+import 'rc-pagination/assets/index.css';
 import { 
   Card,
   Divider,
+  Typography
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import {
@@ -14,6 +18,7 @@ import {
 } from './style';
 import CommentList from './components/CommentList';
 import CommentInput from './components/CommentInput';
+import { actionCreater, action } from './store';
 
 const styles = theme => ({
   card: {
@@ -25,13 +30,13 @@ class Detail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: this.props.match.params.id,
-      article: null,
+      article: null
     }
   }
 
   componentDidMount() {
-    const { id } = this.state;
+    const {changeArticleId, getCommentList} = this.props;
+    const id = this.props.match.params.id;
     axios.get(`${HOST}/article/getArticle?id=${id}`)
       .then((res) => {
         if (res.data.msg === 'success') {
@@ -40,11 +45,13 @@ class Detail extends Component {
           })
         }
       })
+    changeArticleId(id);
+    getCommentList(id, 1);
   }
   
   render() {
     const { article } = this.state;
-    const { classes } = this.props;
+    const { classes, commentPage } = this.props;
     return article ? (
       <Fragment>
         <DetailWrapper>
@@ -63,23 +70,57 @@ class Detail extends Component {
         </DetailWrapper>
         <CommentWrapper>
           <Card>
-            <CommentInput/>
+            <CommentInput
+              rtc={false}
+              cid={null}
+              ucid={null}
+              prefix={""}
+              />
           </Card>
         </CommentWrapper>
         <CommentWrapper>
           <Card>
-            评论
+            <Typography variant="headline">{article.comment}条评论</Typography>
             <Divider/>
             <CommentList/>
           </Card>
         </CommentWrapper>
+        
+        <Pagination
+          onChange={this.handlePaginationChange}
+          current={commentPage}
+          total={article.ucCount}
+          showLessItems
+          showTitle={false}
+          style={{margin: '10px', display: 'flex', justifyContent: 'center'}}
+          />
       </Fragment>
       
     ) : null;
   }
 
+  handlePaginationChange = (page) => {
+    const { getCommentList, changeCommentPage } = this.props;
+    const id = this.props.match.params.id;
+    changeCommentPage(page);
+    getCommentList(id, page);
+  }
 
 }
 
 
-export default withStyles(styles)(Detail);
+const mapDispatchToProps = (dispatch) => ({
+  changeArticleId(id) {
+    dispatch(actionCreater.changeArticleId(id));
+  },
+  getCommentList(id, page) {
+    dispatch(actionCreater.getCommentList(id, page));
+  },
+  changeCommentPage(page) {
+    dispatch(actionCreater.changeCommentPage(page));
+  }
+})
+
+export default connect(null, mapDispatchToProps)(
+  withStyles(styles)(Detail)
+);

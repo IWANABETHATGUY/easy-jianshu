@@ -12,7 +12,8 @@ router.post('/addArticle', async (ctx, next) => {
     content: body.content,
     title: body.title,
     tags: body.tags,
-    userID: body.userID
+    userID: body.userID,
+    summary: body.summary
   });
   let resArticle = await article.save();
   if (resArticle !== null) {
@@ -77,9 +78,10 @@ router.get('/getArticle', async (ctx, next) => {
 })
 
 router.get('/test', async (ctx, next) => {
-  await Article.updateMany({}, {summary: '这是一段测试summary'});
+  await Article.updateMany({}, {ucCount: 0});
 })
 
 
+// TODO 
 
 module.exports = router;
