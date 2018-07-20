@@ -37,10 +37,6 @@ const style = theme => ({
 })
 
 class CommentReply extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
 
   }

@@ -9,7 +9,7 @@ import { actionCreater } from '../store';
 import { connect } from 'react-redux';
 import { HOST } from '../../../libs/config';
 import { withStyles } from '@material-ui/core/styles'
-
+import { openNotificationWithIcon } from '../../../libs/utils';
 const styles = theme => {
   return {
     more: {
@@ -41,9 +41,12 @@ class SimpleMenu extends React.Component {
     axios.delete(`${HOST}/comment/delete?id=${thisId}`)
       .then(res => {
         if (res.data.msg === 'success') {
+          openNotificationWithIcon('success', '成功', '删除成功');
           getCommentList(articleId, commentPage);
           getTotalComment(articleId);
         } else {
+          openNotificationWithIcon('error', '失败', '删除失败');
+
         }
       })
   }

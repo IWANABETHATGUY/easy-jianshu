@@ -8,7 +8,7 @@
 
 # production
 /build
-
+Example.jsx
 # misc
 .DS_Store
 .env.local

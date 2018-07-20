@@ -19,9 +19,7 @@ const styles = {
 }
 
 class CommentInfo extends Component {
-  constructor(props) {
-    super(props);
-  }
+
   
   render() {
     const { classes, info, onReplyClick, bordered, thisId } = this.props;

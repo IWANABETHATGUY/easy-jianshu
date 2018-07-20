@@ -4,6 +4,7 @@ import { HOST } from '../../libs/config';
 import { connect } from 'react-redux';
 import Pagination from 'rc-pagination';
 import 'rc-pagination/assets/index.css';
+import { withRouter } from 'react-router-dom';
 import { 
   Card,
   Divider,
@@ -163,5 +164,5 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  withStyles(styles)(Detail)
+  withStyles(styles)(withRouter(Detail))
 );

@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 import { HOST } from '../../../libs/config';
 import { withStyles } from '@material-ui/core/styles';
-
+import { openNotificationWithIcon } from '../../../libs/utils';
 const styles = theme => ({
   card: {
     width: '100%',
@@ -31,6 +31,7 @@ const styles = theme => ({
 })
 
 class CommentInput extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -64,7 +65,9 @@ class CommentInput extends Component {
         />
         <Collapse in={this.state.commentInputFocus || commentInputCon } timeout="auto" unmountOnExit style={{display: 'flex', justifyContent:
           'flex-end', alignItems: 'baseline'}}>
-          <Button aria-label="Delete" className={classes.button} onClick={this.handleClickCancel.bind(this, false)} size="medium">
+          <Button aria-label="Delete" 
+            buttonRef={cancel => this.cancel =cancel }
+            className={classes.button} onClick={this.handleClickCancel.bind(this, false)} size="medium">
             取消
           </Button>
           <Button 
@@ -92,7 +95,6 @@ class CommentInput extends Component {
   }
 
   handleClickCancel = (status) => {
-    console.log(this.state.content);
     const {onClickCancel} = this.props;
     this.setState({
       commentInputFocus: status
@@ -105,7 +107,7 @@ class CommentInput extends Component {
   handleClickSend = () => {
     const {prefix, rtc, pseudonym, articleId, userID, cid, ucid} = this.props;
     const { content } = this.state;
-    const combineContent = prefix === undefined ? "" : prefix + content
+    const combineContent = prefix === undefined ? "" : prefix + content;
     axios.post(`${HOST}/comment/addComment`, {
       pseudonym,
       content: combineContent,
@@ -117,7 +119,10 @@ class CommentInput extends Component {
     })
       .then((res) => {
         if (res.data.msg === 'success') {
-          alert('add comment success');
+          openNotificationWithIcon('success', '成功', '提交评论成功');
+          this.cancel.click();
+        } else {
+          openNotificationWithIcon('error', '失败', '提交评论失败');
         }
       })
   }

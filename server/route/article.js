@@ -125,7 +125,6 @@ router.delete('/like', async (ctx, next) => {
       likeList: uid
     }
   });
-  console.log(resArticle);
   if (resArticle !== null) {
     ctx.body = returnJSON('success', {});
   } else {

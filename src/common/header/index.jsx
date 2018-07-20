@@ -199,7 +199,6 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(action);
     },
     handleCheckLogin() {
-      loginActionCreater
       dispatch(loginActionCreater.checkLogin());
     },
     handleLogOut() {

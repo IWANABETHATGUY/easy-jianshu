@@ -109,15 +109,18 @@ Comment.pre('remove', async function(next) {
       },
     })
   } else {
+    console.log(this.replyCount);
     await Article.update({_id: this.ArticleID}, {
       $inc: {
-        comment: -1,
+        comment: -(this.replyCount + 1),
         ucCount: -1
       },
       $pull: {
         commentList: this._id
       }
     })
+    exComment.deleteMany({underCommentID: this._id});
+    exComment.deleteOne({_id: this._id});
   }
   await next();
 })

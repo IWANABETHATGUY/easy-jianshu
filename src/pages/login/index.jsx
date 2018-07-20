@@ -68,6 +68,7 @@ class Login extends Component {
                 <Input placeholder="密码"
                   innerRef={(password) => this.loginPassword = password}
                   type="password"
+                  onKeyDown={this.handleLoginKeyDown}
                   />
                 <Button
                   onClick={() => handleLogin(this.loginUsername, this.loginPassword)}
@@ -84,6 +85,7 @@ class Login extends Component {
                 <Input placeholder="确认密码"
                   innerRef={(confirmPassword) => this.signConfirmPassword = confirmPassword}
                   type="password"
+                  onKeyDown={this.handleSignKeyDown}
                 />
                 <Button
                   onClick={() => handleSignIn(this.signUsername, this.signPassword, this.signConfirmPassword)}
@@ -103,6 +105,18 @@ class Login extends Component {
     this.setState({
       pageIndex: index
     })
+  }
+  handleLoginKeyDown = (e) => {
+    const { handleLogin } = this.props;
+    if (e.keyCode === 13) {
+      handleLogin(this.loginUsername, this.loginPassword)
+    }
+  }
+  handleSignKeyDown = (e) => {
+    const { handleSignIn } = this.props;
+    if (e.keyCode === 13) {
+      handleSignIn(this.signUsername, this.signPassword, this.signConfirmPassword);
+    }
   }
 }
 
