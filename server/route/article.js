@@ -77,6 +77,28 @@ router.get('/getArticle', async (ctx, next) => {
   }
 })
 
+
+router.get('/getTotalComment', async (ctx, next) => {
+  ctx.set('Content-Type', 'application/json');
+  let id = ctx.request.query.id;
+  if (!id) {
+    ctx.body = returnJSON('failed', {
+      total: -1
+    });
+    await next();
+  }
+  let resArticle = await Article.findById(id);
+  if (resArticle !== null) {
+    ctx.body = returnJSON('success', {
+      total: resArticle.comment
+    });
+  } else {
+    ctx.body = returnJSON('failed', {
+      total: -1
+    });
+  }
+})
+
 router.get('/test', async (ctx, next) => {
   await Article.updateMany({}, {ucCount: 0});
 })

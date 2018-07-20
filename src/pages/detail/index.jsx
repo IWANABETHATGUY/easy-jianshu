@@ -18,7 +18,7 @@ import {
 } from './style';
 import CommentList from './components/CommentList';
 import CommentInput from './components/CommentInput';
-import { actionCreater, action } from './store';
+import { actionCreater } from './store';
 
 const styles = theme => ({
   card: {
@@ -35,23 +35,26 @@ class Detail extends Component {
   }
 
   componentDidMount() {
-    const {changeArticleId, getCommentList} = this.props;
+    const {changeArticleId, getCommentList, changeTotalComment} = this.props;
     const id = this.props.match.params.id;
     axios.get(`${HOST}/article/getArticle?id=${id}`)
       .then((res) => {
         if (res.data.msg === 'success') {
+          let article = res.data.data.article
           this.setState({
-            article: res.data.data.article
+            article
           })
+          changeTotalComment(article.comment);
         }
       })
+    
     changeArticleId(id);
     getCommentList(id, 1);
   }
   
   render() {
     const { article } = this.state;
-    const { classes, commentPage } = this.props;
+    const { classes, commentPage, totalComment } = this.props;
     return article ? (
       <Fragment>
         <DetailWrapper>
@@ -80,7 +83,7 @@ class Detail extends Component {
         </CommentWrapper>
         <CommentWrapper>
           <Card>
-            <Typography variant="headline">{article.comment}条评论</Typography>
+            <Typography variant="headline">{totalComment}条评论</Typography>
             <Divider/>
             <CommentList/>
           </Card>
@@ -108,6 +111,10 @@ class Detail extends Component {
 
 }
 
+const mapStateToProps = (state) => ({
+  commentPage: state.detail.commentPage,
+  totalComment: state.detail.totalComment
+})
 
 const mapDispatchToProps = (dispatch) => ({
   changeArticleId(id) {
@@ -118,9 +125,12 @@ const mapDispatchToProps = (dispatch) => ({
   },
   changeCommentPage(page) {
     dispatch(actionCreater.changeCommentPage(page));
+  },
+  changeTotalComment(total) {
+    dispatch(actionCreater.changeTotalComment(total));
   }
 })
 
-export default connect(null, mapDispatchToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
   withStyles(styles)(Detail)
 );

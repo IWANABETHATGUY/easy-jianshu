@@ -5,13 +5,21 @@ import {
   CHANGE_COMMENT_INPUT_FOCUS_INDEX,
   CHANGE_ARTICLE_ID,
   GET_COMMENT_LIST,
-  CHANGE_COMMENT_PAGE
+  CHANGE_COMMENT_PAGE,
+  GET_TOTAL_COMMENT
 } from './action';
 
-const CommentList = (commentList) => {
+const CommentListAction = (commentList) => {
   return {
     type: GET_COMMENT_LIST,
     commentList
+  }
+}
+
+export const changeTotalComment = (total) => {
+  return {
+    type: GET_TOTAL_COMMENT,
+    total
   }
 }
 
@@ -35,19 +43,30 @@ export const changeCommentPage = (page) => {
     page
   }
 }
+
 export const getCommentList = (articleId, page) => {
   return (dispatch) => {
     axios.get(`${HOST}/comment/commentList?page=${page}&id=${articleId}`)
       .then(res => {
         let commentList = res.data.data.commentList;
         if (commentList.length) {
-          dispatch(CommentList(commentList));
+          dispatch(CommentListAction(commentList));
         } else {
-          dispatch(CommentList([]));
+          dispatch(CommentListAction([]));
         }
       })
   }
 }
 
+export const getTotalComment = (articleId) => {
+  return (dispatch) => {
+    axios.get(`${HOST}/article/getTotalComment?id=${articleId}`)
+      .then(res => {
+        if (res.data.msg === 'success') {
+          dispatch(changeTotalComment(res.data.data.total));
+        }
+      })
+  }
+}
 
 

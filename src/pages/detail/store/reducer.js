@@ -2,14 +2,16 @@ import {
   CHANGE_COMMENT_INPUT_FOCUS_INDEX,
   CHANGE_ARTICLE_ID,
   GET_COMMENT_LIST,
-  CHANGE_COMMENT_PAGE
+  CHANGE_COMMENT_PAGE,
+  GET_TOTAL_COMMENT
 } from './action';
 
 const defaultState = {
   commentIndex: -1,
   articleId: 0,
   commentPage: 1,
-  commentList: []
+  commentList: [],
+  totalComment: 0
 }
 
 export default (state = defaultState, action) => {
@@ -33,6 +35,12 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         commentPage: action.page
+      }
+    }
+    case GET_TOTAL_COMMENT: {
+      return {
+        ...state,
+        totalComment: action.total
       }
     }
     default:

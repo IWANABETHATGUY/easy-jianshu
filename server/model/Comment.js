@@ -108,6 +108,16 @@ Comment.pre('remove', async function(next) {
         comment: -1
       },
     })
+  } else {
+    await Article.update({_id: this.ArticleID}, {
+      $inc: {
+        comment: -1,
+        ucCount: -1
+      },
+      $pull: {
+        commentList: this._id
+      }
+    })
   }
   await next();
 })

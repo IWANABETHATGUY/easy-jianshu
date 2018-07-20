@@ -3,13 +3,13 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Snackbar
 } from '@material-ui/core';
 import axios from 'axios';
 import { actionCreater } from '../store';
 import { connect } from 'react-redux';
 import { HOST } from '../../../libs/config';
 import { withStyles } from '@material-ui/core/styles'
+
 const styles = theme => {
   return {
     more: {
@@ -36,13 +36,13 @@ class SimpleMenu extends React.Component {
   };
 
   handleRemoveItemClick = () => {
-    const { thisId, getCommentList, articleId, commentPage } = this.props;
+    const { thisId,  articleId, commentPage, getTotalComment, getCommentList } = this.props;
     this.setState({ anchorEl: null });
     axios.delete(`${HOST}/comment/delete?id=${thisId}`)
       .then(res => {
         if (res.data.msg === 'success') {
-          alert('success');
           getCommentList(articleId, commentPage);
+          getTotalComment(articleId);
         } else {
         }
       })
@@ -96,6 +96,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getCommentList(id, page) {
     dispatch(actionCreater.getCommentList(id, page));
+  },
+  getTotalComment(id) {
+    dispatch(actionCreater.getTotalComment(id));
   }
 })
 export default connect(mapStateToProps, mapDispatchToProps)(
