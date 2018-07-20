@@ -6,13 +6,21 @@ import {
   CHANGE_ARTICLE_ID,
   GET_COMMENT_LIST,
   CHANGE_COMMENT_PAGE,
-  GET_TOTAL_COMMENT
+  GET_TOTAL_COMMENT,
+  CHANGE_ARTICLE
 } from './action';
 
 const CommentListAction = (commentList) => {
   return {
     type: GET_COMMENT_LIST,
     commentList
+  }
+}
+
+const changeArticle = (article) => {
+  return {
+    type: CHANGE_ARTICLE,
+    article
   }
 }
 
@@ -69,4 +77,17 @@ export const getTotalComment = (articleId) => {
   }
 }
 
-
+export const getArticle = (articleId) => {
+  return (dispatch) => {
+    axios.get(`${HOST}/article/getArticle?id=${articleId}`, {
+      withCredentials: true
+    })
+      .then((res) => {
+        if (res.data.msg === 'success') {
+          let article = res.data.data.article
+          dispatch(changeArticle(article));
+          dispatch(changeTotalComment(article.comment));
+        }
+      })
+  }
+}

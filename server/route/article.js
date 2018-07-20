@@ -1,4 +1,6 @@
 const Router = require('koa-router');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 const Article = require('../model/Article.js');
 const { returnJSON } = require('../utils/retBody');
 const router = new Router();
@@ -58,17 +60,22 @@ router.get('/articleList', async (ctx, next) => {
 
 router.get('/getArticle', async (ctx, next) => {
   ctx.set('Content-Type', 'application/json');
-  let id = ctx.request.query.id;
-  if (!id) {
+  let articleId = ctx.request.query.id;
+  let uid = ctx.cookies.get('uid');
+  if (!articleId || !uid) {
     ctx.body = returnJSON('failed', {
       article: {}
     });
     await next();
   }
-  let resArticle = await Article.findById(id);
+  let resArticle = await Article.findById(articleId);
   if (resArticle !== null) {
+    let isLiked = resArticle.likeList.filter(item => item.toString() === uid).length > 0;
     ctx.body = returnJSON('success', {
-      article: resArticle
+      article: {
+        ...resArticle._doc,
+        isLiked
+      }
     });
   } else {
     ctx.body = returnJSON('failed', {
@@ -77,6 +84,54 @@ router.get('/getArticle', async (ctx, next) => {
   }
 })
 
+router.get('/like', async (ctx, next) => {
+  ctx.set('Content-Type', 'application/json');
+  let articleId = ctx.request.query.id;
+  let uid = ctx.cookies.get('uid');
+  if (!uid || !articleId) {
+    ctx.body = returnJSON('failed', {});
+    await next();
+  }
+  let resArticle = await Article.update({_id: articleId}, {
+    $inc: {
+      like: 1
+    },
+    $push: {
+      likeList: uid
+    }
+  })
+  console.log(resArticle);
+  if (resArticle !== null) {
+    ctx.body = returnJSON('success', {});
+  } else {
+    ctx.body = returnJSON('failed', {});
+  }
+})
+
+
+router.delete('/like', async (ctx, next) => {
+  ctx.set('Content-Type', 'application/json');
+  let articleId = ctx.request.query.id;
+  let uid = ctx.cookies.get('uid');
+  if (!uid || !articleId) {
+    ctx.body = returnJSON('failed', {});
+    await next();
+  }
+  let resArticle = await Article.update({_id: articleId}, {
+    $inc: {
+      like: -1
+    },
+    $pull: {
+      likeList: uid
+    }
+  });
+  console.log(resArticle);
+  if (resArticle !== null) {
+    ctx.body = returnJSON('success', {});
+  } else {
+    ctx.body = returnJSON('failed', {});
+  }
+})
 
 router.get('/getTotalComment', async (ctx, next) => {
   ctx.set('Content-Type', 'application/json');
@@ -100,7 +155,8 @@ router.get('/getTotalComment', async (ctx, next) => {
 })
 
 router.get('/test', async (ctx, next) => {
-  await Article.updateMany({}, {ucCount: 0});
+  console.log('shtsi');
+  await Article.find
 })
 
 

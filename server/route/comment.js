@@ -19,21 +19,6 @@ const getReplyList = (replyList) => {
   return Promise.all(replyPromiseList);
 }
 
-const beforeRemoveComment = async (comment) => {
-  if (comment.replyToC) {
-    await comment.update({_id: comment.underCommentID}, {
-      $inc: {
-        replyCount: -1
-      },
-      $pull: {
-        replyList: {
-          ObjectId: comment._id
-        }
-      }
-    })
-  }
-}
-
 router.post('/addComment', async (ctx, next) => {
   ctx.set('Content-Type', 'application/json');
   const body = ctx.request.body;

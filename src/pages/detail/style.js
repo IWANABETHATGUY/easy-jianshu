@@ -4,6 +4,9 @@ export const DetailWrapper = styled.div`
   width: 620px;
   margin: 0 auto;
   padding-bottom: 20px;
+  .iconfont.like {
+    color: red;
+  }
 `
 
 export const CommentWrapper = styled.div`

@@ -17,6 +17,10 @@ route.post('/login', async (ctx, next) => {
         maxAge: 1000 * 3600000,
         domain: 'localhost',
       })
+      ctx.cookies.set('uid', resultUser._id, {
+        maxAge: 1000 * 3600000,
+        domain: 'localhost',
+      })
       ctx.body = returnJSON('success', {
         userInfo: {
           username: resultUser.username,
@@ -158,10 +162,10 @@ route.get('/info', async (ctx, next) => {
 
 route.get('/checkLogin', async(ctx, next) => {
   ctx.set('Content-Type', 'application/json');
-  const cookieUsername = ctx.cookies.get('user');
-  if (cookieUsername) {
+  const uid = ctx.cookies.get('uid');
+  if (uid) {
     let resultUser = await User.findOne({
-      username: cookieUsername
+      _id: uid
     });
     if (resultUser !== null) {
       ctx.body =  ctx.body = returnJSON('success', {
@@ -170,7 +174,6 @@ route.get('/checkLogin', async(ctx, next) => {
           pseudonym: resultUser.pseudonym,
           meta: resultUser.meta,
           userID: resultUser._id
-
         }
       });
     } else {
@@ -191,6 +194,10 @@ route.get('/logout', async(ctx, next) => {
     });
     if (result !== null) {
       ctx.cookies.set('user', '', {
+        maxAge: 0,
+        domain: 'localhost',
+      })
+      ctx.cookies.set('uid', '', {
         maxAge: 0,
         domain: 'localhost',
       })

@@ -11,6 +11,7 @@ const Article = new Schema({
     required: true
   },
   commentList: [ObjectId],
+  likeList: [ObjectId],
   summary: {
     type: String,
     default: ''

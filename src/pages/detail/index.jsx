@@ -7,7 +7,8 @@ import 'rc-pagination/assets/index.css';
 import { 
   Card,
   Divider,
-  Typography
+  Typography,
+  Button
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import {
@@ -24,6 +25,11 @@ const styles = theme => ({
   card: {
     width: '100%',
   },
+  button: {
+    '.iconfont': {
+      color: '#f00'
+    }
+  }
 })
 
 class Detail extends Component {
@@ -35,26 +41,15 @@ class Detail extends Component {
   }
 
   componentDidMount() {
-    const {changeArticleId, getCommentList, changeTotalComment} = this.props;
+    const {changeArticleId, getCommentList, getArticle} = this.props;
     const id = this.props.match.params.id;
-    axios.get(`${HOST}/article/getArticle?id=${id}`)
-      .then((res) => {
-        if (res.data.msg === 'success') {
-          let article = res.data.data.article
-          this.setState({
-            article
-          })
-          changeTotalComment(article.comment);
-        }
-      })
-    
+    getArticle(id);
     changeArticleId(id);
     getCommentList(id, 1);
   }
   
   render() {
-    const { article } = this.state;
-    const { classes, commentPage, totalComment } = this.props;
+    const { classes, commentPage, article, totalComment } = this.props;
     return article ? (
       <Fragment>
         <DetailWrapper>
@@ -71,6 +66,16 @@ class Detail extends Component {
           </Card>
 
         </DetailWrapper>
+        <DetailWrapper>
+          <Button variant="extendedFab" aria-label="Delete" className={classes.button}
+            onClick={this.handleLike}
+          >
+            <i className={['iconfont', article.isLiked ? 'like' : ''].join(' ').trim()}>&#xe61e;</i>
+            <span style={{margin: '0 10px'}}>喜欢丨</span>
+            {article.like}
+          </Button>
+        </DetailWrapper>
+        
         <CommentWrapper>
           <Card>
             <CommentInput
@@ -109,11 +114,34 @@ class Detail extends Component {
     getCommentList(id, page);
   }
 
+  handleLike = () => {
+    const {article, getArticle} = this.props;
+    if (!article.isLiked) {
+      axios.get(`${HOST}/article/like?id=${article._id}`, {
+        withCredentials: true
+      })
+        .then(res => {
+          if (res.data.msg === 'success') {
+            getArticle(article._id);
+          }
+        })
+    } else {
+      axios.delete(`${HOST}/article/like?id=${article._id}`, {
+        withCredentials: true
+      })
+        .then(res => {
+          if (res.data.msg === 'success') {
+            getArticle(article._id);
+          }
+        })
+    }
+  }
 }
 
 const mapStateToProps = (state) => ({
   commentPage: state.detail.commentPage,
-  totalComment: state.detail.totalComment
+  totalComment: state.detail.totalComment,
+  article: state.detail.article
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -128,6 +156,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   changeTotalComment(total) {
     dispatch(actionCreater.changeTotalComment(total));
+  },
+  getArticle(id) {
+    dispatch(actionCreater.getArticle(id));
   }
 })
 

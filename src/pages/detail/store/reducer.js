@@ -3,7 +3,8 @@ import {
   CHANGE_ARTICLE_ID,
   GET_COMMENT_LIST,
   CHANGE_COMMENT_PAGE,
-  GET_TOTAL_COMMENT
+  GET_TOTAL_COMMENT,
+  CHANGE_ARTICLE
 } from './action';
 
 const defaultState = {
@@ -11,7 +12,8 @@ const defaultState = {
   articleId: 0,
   commentPage: 1,
   commentList: [],
-  totalComment: 0
+  totalComment: 0,
+  article: null
 }
 
 export default (state = defaultState, action) => {
@@ -41,6 +43,12 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         totalComment: action.total
+      }
+    }
+    case CHANGE_ARTICLE: {
+      return {
+        ...state,
+        article: action.article
       }
     }
     default:
