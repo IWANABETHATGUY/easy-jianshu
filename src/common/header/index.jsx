@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { 
   HeaderWrapper,
@@ -19,12 +19,19 @@ import {
 import { 
   actionCreater as headerActionCreater
 } from './store';
+import {Badge} from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import {
   actionCreater as loginActionCreater
 } from '../../pages/login/store'
 import { connect } from 'react-redux';
 import DropList from './components/DropList';
 
+const styles = {
+  badeg: {
+    top: '-8px'
+  }
+}
 class Header extends Component {
 
   componentWillMount() {
@@ -40,9 +47,9 @@ class Header extends Component {
       handleInputFocused,
       handleInputBlur,
       handleLogOut,
-      handleChangeLoginPage
+      handleChangeLoginPage,
+      classes
     } = this.props;
-    // this.props.history !== '/login' ?
     return  (
       <HeaderWrapper>
         <HeaderBox>
@@ -66,12 +73,11 @@ class Header extends Component {
 
               
             ) : (
+
               <AvatorContainer>
-                <img 
-                  src="http://upload.jianshu.io/users/upload_avatars/4802726/52eb8675-453d-4822-95ef-4e3db9610866?imageMogr2/auto-orient/strip|imageView2/1/w/120/h/120" 
-                  alt=""
-                />
-                ▽
+                <img src="http://upload.jianshu.io/users/upload_avatars/4802726/52eb8675-453d-4822-95ef-4e3db9610866?imageMogr2/auto-orient/strip|imageView2/1/w/120/h/120"
+                  alt="" />
+                <i className="iconfont">&#xe6e9;</i>
                 <DropList
                   listClassName="drop-list"
                   itemClassName="drop-list-item"
@@ -92,10 +98,32 @@ class Header extends Component {
             ) : null 
           }
           <Nav>
-            <Link to="/">
-              <NavItem className="left active">首页</NavItem>
-            </Link>
-            <NavItem className="left download">下载App</NavItem>
+            {
+              !isLogin ? (
+                <Fragment>
+                  <Link to="/">
+                    <NavItem className="left active">首页</NavItem>
+                  </Link>
+                  <NavItem className="left download">下载App</NavItem>
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <NavItem className="left active">
+                    <i className="iconfont menu">&#xe711;</i>发现
+                  </NavItem>
+                  <NavItem className="left download">
+                    <i className="iconfont menu">&#xe748;</i>关注
+                  </NavItem>
+                  <NavItem className="left download">
+                  <Badge badgeContent={4} color="secondary">
+                    <i className="iconfont menu">&#xe65e;</i>消息
+                  </Badge>
+
+                  </NavItem>
+                </Fragment>
+              )
+              
+            }
             
             <NavItem className="right icon">
               <i className="iconfont">&#xe636;</i>
@@ -209,4 +237,7 @@ const mapDispatchToProps = (dispatch) => {
     }
   }
 }
-export default connect(mapStateTOProps, mapDispatchToProps)(withRouter(Header));
+export default connect(mapStateTOProps, mapDispatchToProps)(
+  withRouter(
+    withStyles(styles)(Header)
+))
