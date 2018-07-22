@@ -153,10 +153,11 @@ router.get('/getTotalComment', async (ctx, next) => {
   }
 })
 
-router.get('/test', async (ctx, next) => {
-  console.log('shtsi');
-  await Article.find
-})
+// router.get('/test', async (ctx, next) => {
+//   const from = ctx.request.query.from;
+//   const to = ctx.request.query.to;
+//   ctx.body = returnJSON(+User.isFollowed(from, to), {});
+// })
 
 
 // TODO 

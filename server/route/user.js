@@ -187,10 +187,10 @@ route.get('/checkLogin', async(ctx, next) => {
 
 route.get('/logout', async(ctx, next) => {
   ctx.set('Content-Type', 'application/json');
-  const cookieUsername = ctx.cookies.get('user');
-  if (cookieUsername) {
+  const uid= ctx.cookies.get('uid');
+  if (uid) {
     let result = await User.findOne({
-      username: cookieUsername
+      _id: uid
     });
     if (result !== null) {
       ctx.cookies.set('user', '', {
@@ -212,13 +212,63 @@ route.get('/logout', async(ctx, next) => {
 })
 
 
-route.get('/test', (ctx, next) => {
-  ctx.set('Context-Type', 'application/json');
-  ctx.body = JSON.stringify({
-    name: 'jack',
-    age: 20
+route.get('/isFollowed', async (ctx, next) => {
+  const from = ctx.request.query.from;
+  const to = ctx.request.query.to;
+  const author = await User.findById(to);
+  const result = await author.isFollowed(author, from);
+
+  ctx.body = returnJSON('success', {
+    isFollowed: result
   });
-  next();
 })
 
+route.get('/follow', async (ctx, next) => {
+  const uid = ctx.cookies.get('uid');
+  const authorId = ctx.request.query.id;
+  if (!uid || !authorId) {
+    ctx.body = returnJSON('failed', {
+      isFollowed: result
+    });
+    await next();
+  }
+  const resAuthor = await User.findById(authorId);
+
+  const resUser = await resAuthor.update({
+    $push: {
+      followerList: uid
+    }
+  });
+  if (resUser.ok === 1) {
+    let isFollowed = await resAuthor.isFollowed(await User.findById(authorId), uid);
+    ctx.body = returnJSON("success", {isFollowed});
+  } else {
+    ctx.body = returnJSON("failed", {});
+  }
+  
+})
+
+route.delete('/follow', async (ctx, next) => {
+  const uid = ctx.cookies.get('uid');
+  const authorId = ctx.request.query  .id;
+  if (!uid || !authorId) {
+    ctx.body = returnJSON('failed', {
+      isFollowed: result
+    });
+    await next();
+  }
+  const resAuthor = await User.findById(authorId);
+  const resUser = await resAuthor.update({
+    $pull: {
+      followerList: uid
+    }
+  });
+  if (resUser.ok === 1) {
+    let isFollowed = await resAuthor.isFollowed(await User.findById(authorId), uid);
+    ctx.body = returnJSON("success", {isFollowed});
+  } else {
+    ctx.body = returnJSON("failed", {});
+  }
+  
+})
 module.exports = route;

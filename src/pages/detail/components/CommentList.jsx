@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import  { connect } from 'react-redux';
-import { 
-  List,
-} from '@material-ui/core';
+import List from '@material-ui/core/List';
 import { withStyles } from '@material-ui/core/styles';
 import CommentListItem from './CommentListItem';
 

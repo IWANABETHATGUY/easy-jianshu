@@ -27,11 +27,16 @@ import {
 import { connect } from 'react-redux';
 import DropList from './components/DropList';
 
-const styles = {
+const styles = theme => ({
   badeg: {
-    top: '-8px'
+    lineHeight: '52px',
+    height: '100%',
+    '& span': {
+      top: '10px',
+      right: '-25px'
+    }
   }
-}
+})
 class Header extends Component {
 
   componentWillMount() {
@@ -114,12 +119,13 @@ class Header extends Component {
                   <NavItem className="left download">
                     <i className="iconfont menu">&#xe748;</i>关注
                   </NavItem>
+                  <Link to="/notification">
                   <NavItem className="left download">
-                  <Badge badgeContent={4} color="secondary">
-                    <i className="iconfont menu">&#xe65e;</i>消息
-                  </Badge>
-
+                    <Badge badgeContent={4} color="secondary" className={classes.badeg}>
+                      <i className="iconfont menu">&#xe65e;</i>消息
+                    </Badge>
                   </NavItem>
+                  </Link>
                 </Fragment>
               )
               

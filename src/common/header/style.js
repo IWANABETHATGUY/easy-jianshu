@@ -41,15 +41,9 @@ export const NavItem = styled.div`
     float: right;
     color: #969696;
   }
-  &.icon i{
-    font-size: 20px;
-  }
+
   & .iconfont.menu {
     font-size: 20px;
-  }
-  & .MuiBadge-badge-3 {
-    top: 10px;
-    right: -25px;
   }
   &.active {
     color: #ea6f5a;

@@ -7,7 +7,8 @@ import {
   GET_COMMENT_LIST,
   CHANGE_COMMENT_PAGE,
   GET_TOTAL_COMMENT,
-  CHANGE_ARTICLE
+  CHANGE_ARTICLE,
+  CHANGE_IS_FOLLOWED
 } from './action';
 
 const CommentListAction = (commentList) => {
@@ -21,6 +22,13 @@ const changeArticle = (article) => {
   return {
     type: CHANGE_ARTICLE,
     article
+  }
+}
+
+const changeIsFollowed = (isFollowed) => {
+  return {
+    type: CHANGE_IS_FOLLOWED,
+    isFollowed
   }
 }
 
@@ -77,7 +85,7 @@ export const getTotalComment = (articleId) => {
   }
 }
 
-export const getArticle = (articleId) => {
+export const getArticle = (articleId, userId) => {
   return (dispatch) => {
     axios.get(`${HOST}/article/getArticle?id=${articleId}`, {
       withCredentials: true
@@ -87,6 +95,57 @@ export const getArticle = (articleId) => {
           let article = res.data.data.article
           dispatch(changeArticle(article));
           dispatch(changeTotalComment(article.comment));
+          dispatch(getIsFollowed(userId, article.userID));
+        }
+      })
+  }
+}
+
+export const getIsFollowed = (userId, authorId) => {
+  return (dispatch) => {
+    axios.get(`${HOST}/user/isFollowed?from=${userId}&to=${authorId}`, {
+      withCredentials: true
+    })
+      .then((res) => {
+        if (res.data.msg === 'success') {
+          dispatch(changeIsFollowed(res.data.data.isFollowed));
+          // let article = res.data.data.article
+          // dispatch(changeArticle(article));
+          // dispatch(changeTotalComment(article.comment));
+        }
+      })
+  }
+}
+
+
+
+export const followAuthor = (authorId, userId) => {
+  return (dispatch) => {
+    axios.get(`${HOST}/user/follow?id=${authorId}`, {
+      withCredentials: true
+    })
+      .then((res) => {
+        if (res.data.msg === 'success') {
+          dispatch(changeIsFollowed(res.data.data.isFollowed));
+
+          // dispatch(changeIsFollowed(res.data.data.isFollowed));
+        }
+      })
+  }
+}
+
+export const cancelFollowAuthor = (authorId, userId) => {
+  return (dispatch) => {
+    axios.delete(`${HOST}/user/follow?id=${authorId}`, {
+      withCredentials: true
+    })
+      .then((res) => {
+        if (res.data.msg === 'success') {
+          dispatch(changeIsFollowed(res.data.data.isFollowed));
+          // setTimeout(() => {
+          //   dispatch(getIsFollowed(userId, authorId));
+          // }, 1000)
+          // dispatch(changeIsFollowed(res.data.data.isFollowed));
         }
       })
   }

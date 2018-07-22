@@ -1,11 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { 
-  TextField,
-  Collapse,
-  Button
-} from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Collapse from '@material-ui/core/Collapse';
 import { HOST } from '../../../libs/config';
 import { withStyles } from '@material-ui/core/styles';
 import { openNotificationWithIcon } from '../../../libs/utils';

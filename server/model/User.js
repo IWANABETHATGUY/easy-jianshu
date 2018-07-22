@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
-const Mixed = Schema.Types.Mixed;
-
+const ObjectId = Schema.Types.ObjectId;
+  // TODO: 记得最后一次迭代把那些test接口全部去掉
 const SALT_WORK_FACTOR = 10;
 const MAX_ATTEMPT_TIMES = 5;
 const LOCKED_TIME = 2 * 60 * 60 * 1000;
@@ -19,6 +19,10 @@ const User = new Schema({
     type: String,
     required: true
   },
+  checkedNotifications: [ObjectId],
+  unCheckedNotifications: [ObjectId],
+  followList: [ObjectId],
+  followerList: [ObjectId],
   lockUntil: {
     type: Number,
     default: 0
@@ -39,6 +43,8 @@ const User = new Schema({
   }
 });
 
+// const expUser = mongoose.model('User', User, 'users');
+
 User.virtual('isLocked').get(() => {
   return !!(this.lockUntil && (this.lockUntil > Date.now()));
 })
@@ -47,6 +53,7 @@ User.pre('save', function(next) {
   if (this.isNew) {
     this.meta.createdAt = this.meta.updatedAt = Date.now();
     this.pseudonym = this.username;
+    this.checkedNotifications = this.unCheckedNotifications = [];
   } else {
     this.meta.updatedAt = Date.now();
   }
@@ -80,6 +87,12 @@ User.methods = {
         }
       })
     })
+  },
+  isFollowed: async (author, followerid) => {
+    return new Promise ((resolve, reject) => {
+      resolve(author.followerList.filter(item => item == followerid).length > 0);
+    })
+    
   },
   incLoginAttempts: (user, match) => {
     return new Promise((resolve, reject) => {

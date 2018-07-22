@@ -5,12 +5,12 @@ import { connect } from 'react-redux';
 import Pagination from 'rc-pagination';
 import 'rc-pagination/assets/index.css';
 import { withRouter } from 'react-router-dom';
-import { 
-  Card,
-  Divider,
-  Typography,
-  Button
-} from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import Divider from '@material-ui/core/Divider';
+import Typography from '@material-ui/core/Typography';
+import CardHeader from '@material-ui/core/CardHeader';
+import Avatar from '@material-ui/core/Avatar';
 import { withStyles } from '@material-ui/core/styles';
 import {
   DetailWrapper,
@@ -27,9 +27,29 @@ const styles = theme => ({
     width: '100%',
   },
   button: {
+    background: '#ffffff',
     '.iconfont': {
       color: '#f00'
     }
+  },
+  followButton: {
+    width:'125px',
+    background: '#42c02e',
+    alignSelf: 'center',
+    marginRight: '20px',
+    height: '45px',
+    fontSize: '16px',
+    fontWeight: 'bold',
+    color: '#fff',
+    borderRadius: '30px',
+    '&.followed': {
+      background: '#f0f0f0',
+      color: '#8c8c8c',
+    }
+  },
+  userInfo: {
+    display: 'flex',
+    justifyContent: 'space-between'
   }
 })
 
@@ -37,20 +57,21 @@ class Detail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      article: null
+      article: null,
+      followButtonContent: '已关注'
     }
   }
 
   componentDidMount() {
-    const {changeArticleId, getCommentList, getArticle} = this.props;
+    const {changeArticleId, getCommentList, getArticle, userId} = this.props;
     const id = this.props.match.params.id;
-    getArticle(id);
+    getArticle(id, userId);
     changeArticleId(id);
     getCommentList(id, 1);
   }
   
   render() {
-    const { classes, commentPage, article, totalComment } = this.props;
+    const { classes, commentPage, article, totalComment, isFollowed, userId } = this.props;
     return article ? (
       <Fragment>
         <DetailWrapper>
@@ -68,15 +89,38 @@ class Detail extends Component {
 
         </DetailWrapper>
         <DetailWrapper>
-          <Button variant="extendedFab" aria-label="Delete" className={classes.button}
-            onClick={this.handleLike}
+          <Card className={classes.userInfo}>
+          <CardHeader
+            avatar={
+              <Avatar aria-label="Recipe" className={classes.avatar}>
+                R
+              </Avatar>
+            }
+            title="Shrimp and Chorizo Paella"
+            subheader="September 14, 2016"
           >
-            <i className={['iconfont', article.isLiked ? 'like' : ''].join(' ').trim()}>&#xe61e;</i>
+          </CardHeader>
+          {
+            userId === article.userID ? null : (
+              <Button variant="outlined" 
+                className={[classes.followButton, isFollowed ? 'followed' : '' ].join( ' ').trim()} 
+                onMouseLeave={this.handleFollowLeave.bind(this, isFollowed)} 
+                onMouseEnter={this.handleFollowEnter.bind(this, isFollowed)}
+                onClick={this.handleFollowClick.bind(this, article.userID)}
+              >
+                {isFollowed ? this.state.followButtonContent : '+ 关注'}
+              </Button>
+            )
+          }
+          </Card>
+        </DetailWrapper>
+        <DetailWrapper>
+          <Button variant="extendedFab" aria-label="Delete" className={classes.button} onClick={this.handleLike}>
+            <i className={[ 'iconfont', article.isLiked ? 'like' : ''].join( ' ').trim()}>&#xe61e;</i>
             <span style={{margin: '0 10px'}}>喜欢丨</span>
             {article.like}
           </Button>
         </DetailWrapper>
-        
         <CommentWrapper>
           <Card>
             <CommentInput
@@ -114,7 +158,22 @@ class Detail extends Component {
     changeCommentPage(page);
     getCommentList(id, page);
   }
-
+  handleFollowEnter = (followed) => {
+    if (!followed) {
+      return;
+    }
+    this.setState({
+      followButtonContent: 'x 取消关注'
+    })
+  }
+  handleFollowLeave = (followed) => {
+    if (!followed) {
+      return ;
+    }
+    this.setState({
+      followButtonContent: '已关注'
+    })
+  }
   handleLike = () => {
     const {article, getArticle} = this.props;
     if (!article.isLiked) {
@@ -137,12 +196,23 @@ class Detail extends Component {
         })
     }
   }
+
+  handleFollowClick = (authorId) => {
+    const { followAuthor, isFollowed, cancelFollowAuthor, userId} = this.props;
+    if (!isFollowed) {
+      followAuthor(authorId, userId);
+    } else {
+      cancelFollowAuthor(authorId, userId);
+    }
+  }
 }
 
 const mapStateToProps = (state) => ({
   commentPage: state.detail.commentPage,
   totalComment: state.detail.totalComment,
-  article: state.detail.article
+  article: state.detail.article,
+  isFollowed: state.detail.isFollowed,
+  userId: state.login.userInfo.userID
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -158,8 +228,17 @@ const mapDispatchToProps = (dispatch) => ({
   changeTotalComment(total) {
     dispatch(actionCreater.changeTotalComment(total));
   },
-  getArticle(id) {
-    dispatch(actionCreater.getArticle(id));
+  getArticle(id, userId) {
+    dispatch(actionCreater.getArticle(id, userId));
+  },
+  getIsFollowed(userId, authorId) {
+    dispatch(actionCreater.getIsFollowed(userId, authorId));
+  },
+  followAuthor(authorId) {
+    dispatch(actionCreater.followAuthor(authorId));
+  },
+  cancelFollowAuthor(authorId) {
+    dispatch(actionCreater.cancelFollowAuthor(authorId));
   }
 })
 

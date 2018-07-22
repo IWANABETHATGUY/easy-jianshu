@@ -4,7 +4,8 @@ import {
   GET_COMMENT_LIST,
   CHANGE_COMMENT_PAGE,
   GET_TOTAL_COMMENT,
-  CHANGE_ARTICLE
+  CHANGE_ARTICLE,
+  CHANGE_IS_FOLLOWED
 } from './action';
 
 const defaultState = {
@@ -13,7 +14,8 @@ const defaultState = {
   commentPage: 1,
   commentList: [],
   totalComment: 0,
-  article: null
+  article: null,
+  isFollowed: false
 }
 
 export default (state = defaultState, action) => {
@@ -49,6 +51,12 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         article: action.article
+      }
+    }
+    case CHANGE_IS_FOLLOWED: {
+      return {
+        ...state,
+        isFollowed: action.isFollowed
       }
     }
     default:

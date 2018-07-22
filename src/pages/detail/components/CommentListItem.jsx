@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { 
-  Divider,
-  Avatar,
-  ListItem,
-  ListItemText,
-  Collapse
-} from '@material-ui/core';
+import Avatar from '@material-ui/core/Avatar';
+import Divider from '@material-ui/core/Divider';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Collapse from '@material-ui/core/Collapse';
 import { connect } from 'react-redux';
 import { actionCreater } from '../store';
 import CommentReply from './CommentReply';
