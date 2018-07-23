@@ -85,7 +85,7 @@ export const getTotalComment = (articleId) => {
   }
 }
 
-export const getArticle = (articleId, userId) => {
+export const getArticle = (articleId, userId, init) => {
   return (dispatch) => {
     axios.get(`${HOST}/article/getArticle?id=${articleId}`, {
       withCredentials: true
@@ -95,7 +95,9 @@ export const getArticle = (articleId, userId) => {
           let article = res.data.data.article
           dispatch(changeArticle(article));
           dispatch(changeTotalComment(article.comment));
-          dispatch(getIsFollowed(userId, article.userID));
+          if (init) {
+            dispatch(getIsFollowed(userId, article.userID));
+          }
         }
       })
   }

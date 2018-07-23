@@ -96,7 +96,7 @@ class Detail extends Component {
                 R
               </Avatar>
             }
-            title="Shrimp and Chorizo Paella"
+            title={article.pseudonym}
             subheader="September 14, 2016"
           >
           </CardHeader>
@@ -115,7 +115,9 @@ class Detail extends Component {
           </Card>
         </DetailWrapper>
         <DetailWrapper>
-          <Button variant="extendedFab" aria-label="Delete" className={classes.button} onClick={this.handleLike}>
+          <Button variant="extendedFab" aria-label="Delete" 
+            className={classes.button} onClick={this.handleLike}
+          >
             <i className={[ 'iconfont', article.isLiked ? 'like' : ''].join( ' ').trim()}>&#xe61e;</i>
             <span style={{margin: '0 10px'}}>喜欢丨</span>
             {article.like}
@@ -182,7 +184,7 @@ class Detail extends Component {
       })
         .then(res => {
           if (res.data.msg === 'success') {
-            getArticle(article._id);
+            getArticle(article._id, undefined, false);
           }
         })
     } else {
@@ -191,7 +193,7 @@ class Detail extends Component {
       })
         .then(res => {
           if (res.data.msg === 'success') {
-            getArticle(article._id);
+            getArticle(article._id, undefined, false);
           }
         })
     }
@@ -228,8 +230,8 @@ const mapDispatchToProps = (dispatch) => ({
   changeTotalComment(total) {
     dispatch(actionCreater.changeTotalComment(total));
   },
-  getArticle(id, userId) {
-    dispatch(actionCreater.getArticle(id, userId));
+  getArticle(id, userId, init = true) {
+    dispatch(actionCreater.getArticle(id, userId, init));
   },
   getIsFollowed(userId, authorId) {
     dispatch(actionCreater.getIsFollowed(userId, authorId));

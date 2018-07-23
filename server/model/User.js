@@ -88,12 +88,6 @@ User.methods = {
       })
     })
   },
-  isFollowed: async (author, followerid) => {
-    return new Promise ((resolve, reject) => {
-      resolve(author.followerList.filter(item => item == followerid).length > 0);
-    })
-    
-  },
   incLoginAttempts: (user, match) => {
     return new Promise((resolve, reject) => {
       if ((user.lockUntil < Date.now()) && match) {
@@ -142,6 +136,11 @@ User.methods = {
   }
 }
 
-
+User.statics.isFollowed = async (author, followerid) => {
+  return new Promise ((resolve, reject) => {
+    resolve(author.followerList.filter(item => item == followerid).length > 0);
+  })
+  
+},
 
 module.exports = mongoose.model('User', User, 'users');

@@ -216,7 +216,7 @@ route.get('/isFollowed', async (ctx, next) => {
   const from = ctx.request.query.from;
   const to = ctx.request.query.to;
   const author = await User.findById(to);
-  const result = await author.isFollowed(author, from);
+  const result = await User.isFollowed(author, from);
 
   ctx.body = returnJSON('success', {
     isFollowed: result
@@ -232,15 +232,19 @@ route.get('/follow', async (ctx, next) => {
     });
     await next();
   }
-  const resAuthor = await User.findById(authorId);
 
-  const resUser = await resAuthor.update({
+  const resUser = await User.update({_id: authorId},{
     $push: {
       followerList: uid
     }
   });
-  if (resUser.ok === 1) {
-    let isFollowed = await resAuthor.isFollowed(await User.findById(authorId), uid);
+  const resFollower = await User.update({_id: uid},{
+    $push: {
+      followList: authorId
+    }
+  });
+  if (resUser.ok === 1 && resFollower.ok === 1) {
+    let isFollowed = await User.isFollowed(await User.findById(authorId), uid);
     ctx.body = returnJSON("success", {isFollowed});
   } else {
     ctx.body = returnJSON("failed", {});
@@ -257,14 +261,18 @@ route.delete('/follow', async (ctx, next) => {
     });
     await next();
   }
-  const resAuthor = await User.findById(authorId);
-  const resUser = await resAuthor.update({
+  const resAuthor = await User.update({_id: authorId},{
     $pull: {
       followerList: uid
     }
   });
-  if (resUser.ok === 1) {
-    let isFollowed = await resAuthor.isFollowed(await User.findById(authorId), uid);
+  const resFollower = await User.update({_id: uid},{
+    $pull: {
+      followList: authorId
+    }
+  });
+  if (resAuthor.ok === 1 && resFollower.ok === 1) {
+    let isFollowed = await User.isFollowed(await User.findById(authorId), uid);
     ctx.body = returnJSON("success", {isFollowed});
   } else {
     ctx.body = returnJSON("failed", {});
