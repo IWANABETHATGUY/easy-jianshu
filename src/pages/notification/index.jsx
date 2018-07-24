@@ -22,7 +22,10 @@ const styles = {
 }
 class Notification extends Component {
   render() {
-    const listItems = [{content: '评论', path: 'comment'}, {content: '关注', path: 'follow'}];
+    const listItems = [
+      {content: '评论', path: 'comment', icon: `&#xe600;`}, 
+      {content: '关注', path: 'follow', icon: `&#xe668;`}
+    ];
     const { match, classes, location } = this.props;
 
     return (
@@ -34,6 +37,9 @@ class Notification extends Component {
                 <ListItem button key={index} component={Link} to={`${match.url}/${item.path}`}
                   className={location.pathname === `${match.url}/${item.path}` ? 'active' : ''}
                 >
+                <ListItemIcon>
+                  <i className="iconfont" dangerouslySetInnerHTML={{__html: item.icon}}></i> 
+                </ListItemIcon>
                   <ListItemText primary={item.content} />
                 </ListItem>
                 

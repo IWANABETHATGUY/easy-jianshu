@@ -67,10 +67,11 @@ router.get('/getArticle', async (ctx, next) => {
       article: {}
     });
     await next();
+    return;
   }
   let resArticle = await Article.findById(articleId);
   if (resArticle !== null) {
-    let isLiked = resArticle.likeList.filter(item => item.toString() === uid).length > 0;
+    let isLiked = resArticle.likeList.filter(item => item == uid).length > 0;
     ctx.body = returnJSON('success', {
       article: {
         ...resArticle._doc,
@@ -91,6 +92,7 @@ router.get('/like', async (ctx, next) => {
   if (!uid || !articleId) {
     ctx.body = returnJSON('failed', {});
     await next();
+    return;
   }
   let resArticle = await Article.update({_id: articleId}, {
     $inc: {
@@ -100,7 +102,6 @@ router.get('/like', async (ctx, next) => {
       likeList: uid
     }
   })
-  console.log(resArticle);
   if (resArticle !== null) {
     ctx.body = returnJSON('success', {});
   } else {
@@ -116,6 +117,7 @@ router.delete('/like', async (ctx, next) => {
   if (!uid || !articleId) {
     ctx.body = returnJSON('failed', {});
     await next();
+    return;
   }
   let resArticle = await Article.update({_id: articleId}, {
     $inc: {

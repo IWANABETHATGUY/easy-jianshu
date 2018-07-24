@@ -76,7 +76,10 @@ class Follow extends Component {
                   <div className={classes.replayCommentBox}>
                     <a className="user-name">{item.pseudonym}</a>
                     <span className={classes.replayCommentContainer}> 发布了新的文章 </span>
-                    <a className={classes.articleTitle} href={`/detail/${item._id}`} target="_blank">{`《${item.title}》`}</a>
+                    <a 
+                     className={classes.articleTitle} href={`/detail/${item._id}`} target="_blank"
+                     onClick={this.handleCheckNotification.bind(this, item.cid)}
+                    >{`《${item.title}》`}</a>
                   </div>
                 </div>
                 <div className={classes.replayCommentInfoContainer}>{item.meta.createdAt}</div>
@@ -87,6 +90,12 @@ class Follow extends Component {
         </List>
       </div>
     );
+  }
+
+  handleCheckNotification = (id) => {
+    axios.get(`${HOST}/notification/checked?cid=${id}`, {
+      withCredentials: true
+    })
   }
 }
 

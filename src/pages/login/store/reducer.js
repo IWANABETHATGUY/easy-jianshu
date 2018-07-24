@@ -8,7 +8,7 @@ const defaultState = {
   isLogin: true,
   loginPageIndex: 0,
   userInfo: {
-
+    ucNotification: []
   }
 }
 

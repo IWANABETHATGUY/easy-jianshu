@@ -74,7 +74,10 @@ Article.pre('save', async function(next) {
     author.followerList.forEach(async (id) => {
       await User.update({_id: id}, {
         $push: {
-          unCheckedNotifications: notificationId
+          unCheckedNotifications: {
+            type: 'article',
+            id: notificationId
+          }
         }
       })
     })

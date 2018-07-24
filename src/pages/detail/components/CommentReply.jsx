@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { escape } from 'lodash';
+import { escape } from 'lodash-es';
 import Avatar from '@material-ui/core/Avatar';
 import List from '@material-ui/core/List';
 import { withStyles } from '@material-ui/core/styles';

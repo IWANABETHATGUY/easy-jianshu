@@ -28,7 +28,7 @@ import { connect } from 'react-redux';
 import DropList from './components/DropList';
 
 const styles = theme => ({
-  badeg: {
+  badge: {
     lineHeight: '52px',
     height: '100%',
     '& span': {
@@ -40,7 +40,8 @@ const styles = theme => ({
 class Header extends Component {
 
   componentWillMount() {
-    const { handleCheckLogin } = this.props;
+    const { handleCheckLogin, userInfo } = this.props;
+    console.log(userInfo);
     handleCheckLogin();
   }
 
@@ -48,6 +49,7 @@ class Header extends Component {
     const { 
       focus,
       list,
+      userInfo,
       isLogin,
       handleInputFocused,
       handleInputBlur,
@@ -75,10 +77,7 @@ class Header extends Component {
                   onClick={() => handleChangeLoginPage(1)}
                 >注册</Button>
               </Link>
-
-              
             ) : (
-
               <AvatorContainer>
                 <img src="http://upload.jianshu.io/users/upload_avatars/4802726/52eb8675-453d-4822-95ef-4e3db9610866?imageMogr2/auto-orient/strip|imageView2/1/w/120/h/120"
                   alt="" />
@@ -92,7 +91,7 @@ class Header extends Component {
               </AvatorContainer>
             )
           }
-          { !isLogin ? (
+          { !isLogin && (
             <Link to="/login">
               <NavItem 
                 className="right active" 
@@ -100,7 +99,7 @@ class Header extends Component {
                 onClick={() => handleChangeLoginPage(0)}
               >登录</NavItem>
             </Link>
-            ) : null 
+            )
           }
           <Nav>
             {
@@ -119,13 +118,16 @@ class Header extends Component {
                   <NavItem className="left download">
                     <i className="iconfont menu">&#xe748;</i>关注
                   </NavItem>
-                  <Link to="/notification">
-                  <NavItem className="left download">
-                    <Badge badgeContent={4} color="secondary" className={classes.badeg}>
-                      <i className="iconfont menu">&#xe65e;</i>消息
-                    </Badge>
+                  <NavItem className="left download" onClick={() => this.props.history.push('/notification')}>
+                  
+                  {
+                     userInfo.ucNotification && userInfo.ucNotification.length ? (
+                      <Badge badgeContent={userInfo.ucNotification.length} color="secondary" className={classes.badge}>
+                        <i className="iconfont menu">&#xe65e;</i>消息
+                      </Badge>
+                    ) : <Fragment><i className="iconfont menu">&#xe65e;</i>消息</Fragment>
+                  }
                   </NavItem>
-                  </Link>
                 </Fragment>
               )
               
@@ -146,9 +148,6 @@ class Header extends Component {
         </HeaderBox>
 
       </HeaderWrapper>)
-      // : (
-      //   <HeaderWrapper style={{background: '#eee'}}/>
-      // )
   }
   // 事件处理函数
   getSerachArea = () => {
@@ -198,7 +197,8 @@ const mapStateTOProps = (state) => {
     mouseIn: state.header.mouseIn,
     page: state.header.page,
     totalPage: state.header.totalPage,
-    isLogin: state.login.isLogin
+    isLogin: state.login.isLogin,
+    userInfo: state.login.userInfo
   }
 }
 

@@ -19,8 +19,8 @@ const User = new Schema({
     type: String,
     required: true
   },
-  checkedNotifications: [ObjectId],
-  unCheckedNotifications: [ObjectId],
+  checkedNotifications: {type: Array},
+  unCheckedNotifications:{type: Array},
   followList: [ObjectId],
   followerList: [ObjectId],
   lockUntil: {

@@ -10,6 +10,7 @@ import WriteArticle from './pages/WriteArticle/load';
 import Notification from './pages/notification';
 import 'react-placeholder/lib/ReactPlaceholder';
 import 'antd/dist/antd.css';
+import ScrollToTop from './common/ScrollToTop';
 const NotMatch = (props) => {
   return (
     <div>404</div>
@@ -21,23 +22,27 @@ class App extends Component {
       <div className='App'>
         <Provider store={store}>
           <BrowserRouter>
-
-            <Fragment>
-              <Header/> 
-              <Switch>
-                <Route path="/" exact component={Home}/>
-                <Route path="/detail/:id" exact component={Detail}/>
-                <Route path="/login" exact component={Login}/>
-                <Route path="/writeArticle" exact component={WriteArticle}/>
-                <Route path="/notification" component={Notification}/>
-                <Route path="*" component={NotMatch}/>  
-              </Switch>
-            </Fragment> 
+            <ScrollToTop>
+              <Fragment>
+                <Header/> 
+                <Switch>
+                  <Route path="/" exact component={Home}/>
+                  <Route path="/detail/:id" exact component={Detail}/>
+                  <Route path="/login" exact component={Login}/>
+                  <Route path="/writeArticle" exact component={WriteArticle}/>
+                  <Route path="/notification" component={Notification}/>
+                  <Route path="*" component={NotMatch}/>  
+                </Switch>
+              </Fragment> 
+            </ScrollToTop>
           </BrowserRouter>
         </Provider>
       </div>
     );
   }
 }
+
+
+
 
 export default App;

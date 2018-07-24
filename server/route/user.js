@@ -26,7 +26,8 @@ route.post('/login', async (ctx, next) => {
           username: resultUser.username,
           pseudonym: resultUser.pseudonym,
           meta: resultUser.meta,
-          userID: resultUser._id
+          userID: resultUser._id,
+          ucNotification: resultUser.unCheckedNotifications
         }
       });
     } else {
@@ -173,7 +174,8 @@ route.get('/checkLogin', async(ctx, next) => {
           username: resultUser.username,
           pseudonym: resultUser.pseudonym,
           meta: resultUser.meta,
-          userID: resultUser._id
+          userID: resultUser._id,
+          ucNotification: resultUser.unCheckedNotifications
         }
       });
     } else {
