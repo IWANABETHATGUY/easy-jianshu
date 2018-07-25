@@ -61,8 +61,8 @@ router.get('/articleList', async (ctx, next) => {
 router.get('/getArticle', async (ctx, next) => {
   ctx.set('Content-Type', 'application/json');
   let articleId = ctx.request.query.id;
-  let uid = ctx.cookies.get('uid');
-  if (!articleId || !uid) {
+  let uid = ctx.cookies.get('uid') || '';
+  if (!articleId) {
     ctx.body = returnJSON('failed', {
       article: {}
     });

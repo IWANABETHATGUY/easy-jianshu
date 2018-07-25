@@ -10,6 +10,7 @@ import {
   TextField,
   Modal
 } from '@material-ui/core';
+import { openNotificationWithIcon } from '../../libs/utils';
 import { withStyles } from '@material-ui/core/styles'
 import { WriteArticleWrapper } from './style';
 import { HOST } from '../../libs/config';
@@ -190,9 +191,9 @@ class WriteArticle extends Component {
     })
     .then(res => {
       if (res.data.msg === 'success') {
-        alert('published successfully');
+        openNotificationWithIcon('success', '成功', '发布新的文章成功');
       } else {
-        alert('published failed');
+        openNotificationWithIcon('error', '失败', '发布新的文章失败');
       }
     }) 
   }

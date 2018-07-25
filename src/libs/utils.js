@@ -1,9 +1,9 @@
-import { notification } from 'antd';
+import Notification from 'antd/lib/notification';
 
 export const openNotificationWithIcon = (type, title, message) => {
-  notification[type]({
+  Notification[type]({
     message: title,
     description: message,
-    duration: 2.5
+    duration: 1.5
   });
 };

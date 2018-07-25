@@ -9,13 +9,13 @@ const Loading = () => {
   return (
     <WriteArticleWrapper>
       <ReactPlaceholder type="rect"  style={{width: '150px', height: '50px', margin: '30px 0 10px 0' , padding: '0 16px', borderRadius: '24px'}} ready={false} showLoadingAnimation={true}>
-        {null}
+        {''}
       </ReactPlaceholder>
       <ReactPlaceholder type="text" rows={1} style={{width: '100%', padding: '0 20px' , margin: '10px 0'}} ready={false} showLoadingAnimation={true}>
-        {null}
+        {''}
       </ReactPlaceholder>
       <ReactPlaceholder type="rect"  style={{width: '100%', height: '600px', padding: '0 20px'}} ready={false} showLoadingAnimation={true}>
-        {null}
+        {''}
       </ReactPlaceholder>
     </WriteArticleWrapper>
     

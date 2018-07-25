@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 const Article = require('./Article');
-
+const Notification = require('./Notification');
+const User = require('./User');
 
 const Comment = new Schema({
   pseudonym: {
@@ -59,12 +60,27 @@ Comment.pre('save', async function(next) {
     this.replyList = [];
     if (!this.replyToC) {
       try {
+        // 如果该评论是回复某篇文章的，他的underCommentID也就是他所属直接属于某篇文章的评论
         this.underCommentID = this._id;
-        await Article.update({_id: this.ArticleID}, {
+        const resArticle = await Article.findById(this.ArticleID);
+        await resArticle.update({
           $push: {commentList: this._id},
           $inc: {
             comment: 1,
             ucCount: 1
+          }
+        })
+        let resNotification = await Notification.create({
+          type: 'acomment',
+          contentId: this._id,
+          userID: this.userID
+        });
+        await User.update({_id: resArticle.userID}, {
+          $push: {
+            unCheckedNotifications: {
+              type: 'acomment',
+              id: resNotification._id
+            }
           }
         })
       } catch (err){
@@ -73,6 +89,7 @@ Comment.pre('save', async function(next) {
 
     } else {
       try {
+        
         await exComment.update({_id: this.underCommentID}, {
           $push: {replyList: this._id},
           $inc: {
@@ -84,13 +101,28 @@ Comment.pre('save', async function(next) {
             comment: 1
           }
         })
+        let resNotification = await Notification.create({
+          type: 'ccomment',
+          contentId: this._id,
+          userID: this.userID
+        });
+        let replyUser = await exComment.findById(this.CommentID);
+        console.log(replyUser.userID);
+        await User.update({_id: replyUser.userID}, {
+          $push: {
+            unCheckedNotifications: {
+              type: 'ccomment',
+              id: resNotification._id
+            }
+          }
+        })
+
       } catch (err) {
         next(err);
       }
     }
   }
-  
-  next();
+  await next();
 })
 
 Comment.pre('remove', async function(next) {
@@ -109,7 +141,6 @@ Comment.pre('remove', async function(next) {
       },
     })
   } else {
-    console.log(this.replyCount);
     await Article.update({_id: this.ArticleID}, {
       $inc: {
         comment: -(this.replyCount + 1),

@@ -229,10 +229,9 @@ route.get('/follow', async (ctx, next) => {
   const uid = ctx.cookies.get('uid');
   const authorId = ctx.request.query.id;
   if (!uid || !authorId) {
-    ctx.body = returnJSON('failed', {
-      isFollowed: result
-    });
+    ctx.body = returnJSON('failed', {});
     await next();
+    return;
   }
 
   const resUser = await User.update({_id: authorId},{
@@ -280,5 +279,15 @@ route.delete('/follow', async (ctx, next) => {
     ctx.body = returnJSON("failed", {});
   }
   
+})
+
+
+route.get('/init', async (ctx, next) => {
+  await User.updateMany({}, {
+    $pull: {
+      unCheckedNotifications: {},
+      checkedNotifications: {}
+    }
+  })
 })
 module.exports = route;

@@ -16,21 +16,21 @@ const Loading = () => {
       <LoginBox>
         <TabList>
           <ReactPlaceholder type="rect" style={{width: '200px', height: '30px', margin: '10px auto'}} ready={false} showLoadingAnimation={true}>
-            {null}
+            {''}
           </ReactPlaceholder>
         </TabList>
         <TabPageBox className="box">
           <TabPageWrapper>
             <TabPage>
               <ReactPlaceholder type="rect" style={{width: '200px', height: '30px', margin: '10px auto'}} ready={false} showLoadingAnimation={true}>
-                {null}
+                {''}
               </ReactPlaceholder>
               <ReactPlaceholder type="rect" style={{width: '200px', height: '30px', margin: '10px auto'}} ready={false} showLoadingAnimation={true}>
-                {null}
+                {''}
               </ReactPlaceholder>
               <ReactPlaceholder type="rect" style={{width: '220px', height: '30px', margin: '20px auto', borderRadius: '15px'}} ready={false}
                 showLoadingAnimation={true}>
-                {null}
+                {''}
               </ReactPlaceholder>
 
             </TabPage>

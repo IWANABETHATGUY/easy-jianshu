@@ -11,14 +11,14 @@ const Loading = () => {
     <DetailWrapper>
       <Header>
         <ReactPlaceholder type="rect" style={{width: '100px', height: '50px', margin: '0 auto'}} ready={false} showLoadingAnimation={true}>
-          {null}
+          {''}
         </ReactPlaceholder>
       </Header>
       <ReactPlaceholder type="rect"  style={{width: '100%', height: '400px'}} ready={false} showLoadingAnimation={true}>
-        {null}
+        {''}
       </ReactPlaceholder>
       <ReactPlaceholder type="text"  rows={10} ready={false} showLoadingAnimation={true}>
-        {null}
+        {''}
       </ReactPlaceholder>
     </DetailWrapper>
     

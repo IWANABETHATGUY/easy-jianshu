@@ -3,7 +3,7 @@ import { Divider, List, Avatar } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import { HOST } from '../../../../libs/config';
-import Item from '../../../../../node_modules/antd/lib/list/Item';
+import ReactPlaceholder from 'react-placeholder';
 
 const styles = theme => ({
   replayComment: {
@@ -59,14 +59,18 @@ class Follow extends Component {
   }
   render() {
     const { classes } = this.props;
-    const { followInfoList } = this.state;
+    const { followInfoList, listLoading } = this.state;
     return (
       <div>
         <div style={{fontWeight: 'bold', marginBottom: '20px', fontSize: '14px'}}>全部关注</div>
-        
-        <List>
-          {
-            followInfoList.map((item, index) => (
+        {
+          listLoading ? (
+            <ReactPlaceholder type="media" rows={4}  ready={false} showLoadingAnimation={true}>
+              {''}
+            </ReactPlaceholder>
+          ) : (
+            <List>
+              { followInfoList.map((item, index) => (
               <div key={index}>
                 <Divider/>
                 <div className={classes.replayComment}>
@@ -76,18 +80,18 @@ class Follow extends Component {
                   <div className={classes.replayCommentBox}>
                     <a className="user-name">{item.pseudonym}</a>
                     <span className={classes.replayCommentContainer}> 发布了新的文章 </span>
-                    <a 
-                     className={classes.articleTitle} href={`/detail/${item._id}`} target="_blank"
-                     onClick={this.handleCheckNotification.bind(this, item.cid)}
-                    >{`《${item.title}》`}</a>
+                    <a className={classes.articleTitle} href={`/detail/${item._id}`} target="_blank" onClick={this.handleCheckNotification.bind(this,
+                      item.cid)}>{`《${item.title}》`}</a>
                   </div>
                 </div>
                 <div className={classes.replayCommentInfoContainer}>{item.meta.createdAt}</div>
               </div>
-            ))
-          }
-          
-        </List>
+              )) }
+
+            </List>
+          )
+        }
+        
       </div>
     );
   }
