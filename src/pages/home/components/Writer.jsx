@@ -22,7 +22,6 @@ class Writer extends Component {
           <WriterList>
             
             {
-              writerList.length > 0 ? 
               writerList.map((item, index) => {
                 return (
                   <WriterItem
@@ -41,34 +40,13 @@ class Writer extends Component {
                     <p className="desc">{item.desc}</p>
                   </WriterItem>
                 )
-              }) : this.skeletonRender()
+              })
             }
             
           </WriterList>
         </WriterWrapper>
       </div>
     );
-  }
-
-  skeletonRender = () => {
-    return (
-      <Fragment>
-        <WriterItem>
-          <a className="avator" style={{background: '#ccc', borderRadius: '50%'}}>
-          </a>
-          <a href="" className="name" style={{background: '#ccc', width: '60px', margin: '0 60px', height: '15px'}}>
-          </a>
-          <p className="desc" style={{background: '#ccc', width: '150px', height: '16px', margin: '4px 60px'}}></p>
-        </WriterItem>
-        <WriterItem>
-          <a className="avator" style={{background: '#ccc', borderRadius: '50%'}}>
-          </a>
-          <a href="" className="name" style={{background: '#ccc', width: '60px', margin: '0 60px', height: '15px'}}>
-          </a>
-          <p className="desc" style={{background: '#ccc', width: '150px', height: '16px', margin: '4px 60px'}}></p>
-        </WriterItem>
-      </Fragment>
-    )
   }
 }
 
