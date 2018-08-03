@@ -15,11 +15,9 @@ route.post('/login', async (ctx, next) => {
     if (res) {
       ctx.cookies.set('user', body.username, {
         maxAge: 1000 * 3600000,
-        domain: 'localhost',
       })
       ctx.cookies.set('uid', resultUser._id, {
         maxAge: 1000 * 3600000,
-        domain: 'localhost',
       })
       ctx.body = returnJSON('success', {
         userInfo: {

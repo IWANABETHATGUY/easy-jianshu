@@ -19,7 +19,7 @@ import {
 import { 
   actionCreater as headerActionCreater
 } from './store';
-import {Badge} from '@material-ui/core';
+import Badge from '@material-ui/core/Badge';
 import { withStyles } from '@material-ui/core/styles';
 import {
   actionCreater as loginActionCreater

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Divider, List, Avatar } from '@material-ui/core'
+import Divider from '@material-ui/core/Divider';
+import List from '@material-ui/core/List';
+import Avatar from '@material-ui/core/Avatar';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import { HOST } from '../../../../libs/config';

@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Route, Link, Redirect, Switch } from 'react-router-dom';
-import { Card, List, ListItem, ListItemIcon, ListItemText  } from '@material-ui/core'
+import List from '@material-ui/core/List';
+import Card from '@material-ui/core/Card';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import { withStyles } from '@material-ui/core/styles';
 import { NotificationWrapper } from './style';
 import Comment from './pages/comment/index.jsx';

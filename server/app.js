@@ -16,7 +16,7 @@ const app = new Koa();
 app.use(bodyParser());
 
 app.use(async (ctx, next) => {
-  ctx.set("Access-Control-Allow-Origin", 'http://localhost:3000');
+  ctx.set("Access-Control-Allow-Origin", 'http://47.94.4.230');
   ctx.set("Access-Control-Allow-Credentials", true);
   ctx.set("Access-Control-Max-Age", 86400000);
   ctx.set("Access-Control-Allow-Methods", "OPTIONS, GET, PUT, POST, DELETE");
