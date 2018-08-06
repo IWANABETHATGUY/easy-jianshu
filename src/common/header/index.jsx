@@ -41,7 +41,6 @@ class Header extends Component {
 
   componentWillMount() {
     const { handleCheckLogin, userInfo } = this.props;
-    console.log(userInfo);
     handleCheckLogin();
   }
 

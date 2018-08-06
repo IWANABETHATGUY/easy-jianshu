@@ -110,16 +110,15 @@ export const ListMeta = styled.div`
 
 export const RecommendWrapper = styled.div`
   margin-bottom: 30px;
-  with: 280px;
+  height: 280px;
+  width: 280px;
 `
 
-export const RecommendItem = styled.div`
-  width: 280px;
+export const RecommendItem = styled.img`
+  width: 100%;
   height: 50px;
-  background: ${(props) => props.imgUrl};
   border-radius: 4px;
   margin-bottom: 6px;
-  background-size: contain;
 `
 
 export const WriterWrapper = styled.div`

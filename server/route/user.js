@@ -1,5 +1,6 @@
 const Router = require('koa-router');
 const User = require('../model/User.js');
+const Article = require('../model/Article.js');
 const { returnJSON } = require('../utils/retBody');
 
 const route = new Router();
@@ -65,99 +66,6 @@ route.post('/signIn', async (ctx) => {
 })
 
 
-route.get('/info', async (ctx, next) => {
-  ctx.set('Content-Type', 'application/json');
-  let msg = {
-    "success": true,
-    "data": {
-      "articleList": [{
-        "title": "阿里腾讯百度头条美团iOS面试总结",
-        "summary": "面试基本已经结束了，目前已拿头条、百度、腾讯offer，现在可以好好来写写总结了，关于面试题，可能没那么多时间来总结答案，有什么需要讨论的地方欢...",
-        "picUrl": "http://upload-images.jianshu.io/upload_images/12035157-bc61f8d98b31d953.png?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240",
-        "author": "小迪_57b5",
-        "comment": 10,
-        "like": 20
-      }, {
-        "title": "那年七月，她走了",
-        "summary": "那一年，是2011年。 同事们刚刚知道依依生了女儿没两天，还来不及去祝贺，竟又突然接到噩耗：她走了！ 谁也想不到，这个刚为人母的24岁姑娘，在凌...",
-        "picUrl": "http://upload-images.jianshu.io/upload_images/11425432-f10db8f6d9553074.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240",
-        "author": "繁花朵朵开",
-        "comment": 43,
-        "like": 31
-      },{
-        "title": "那年七月，她走了",
-        "summary": "那一年，是2011年。 同事们刚刚知道依依生了女儿没两天，还来不及去祝贺，竟又突然接到噩耗：她走了！ 谁也想不到，这个刚为人母的24岁姑娘，在凌...",
-        "picUrl": "http://upload-images.jianshu.io/upload_images/11425432-f10db8f6d9553074.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240",
-        "author": "繁花朵朵开",
-        "comment": 43,
-        "like": 31
-      },{
-        "title": "那年七月，她走了",
-        "summary": "那一年，是2011年。 同事们刚刚知道依依生了女儿没两天，还来不及去祝贺，竟又突然接到噩耗：她走了！ 谁也想不到，这个刚为人母的24岁姑娘，在凌...",
-        "picUrl": "http://upload-images.jianshu.io/upload_images/11425432-f10db8f6d9553074.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240",
-        "author": "繁花朵朵开",
-        "comment": 43,
-        "like": 31
-      },{
-        "title": "那年七月，她走了",
-        "summary": "那一年，是2011年。 同事们刚刚知道依依生了女儿没两天，还来不及去祝贺，竟又突然接到噩耗：她走了！ 谁也想不到，这个刚为人母的24岁姑娘，在凌...",
-        "picUrl": "http://upload-images.jianshu.io/upload_images/11425432-f10db8f6d9553074.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240",
-        "author": "繁花朵朵开",
-        "comment": 43,
-        "like": 31
-      },
-      {
-        "title": "那年七月，她走了",
-        "summary": "那一年，是2011年。 同事们刚刚知道依依生了女儿没两天，还来不及去祝贺，竟又突然接到噩耗：她走了！ 谁也想不到，这个刚为人母的24岁姑娘，在凌...",
-        "picUrl": "http://upload-images.jianshu.io/upload_images/11425432-f10db8f6d9553074.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240",
-        "author": "繁花朵朵开",
-        "comment": 43,
-        "like": 31
-      },
-      {
-        "title": "那年七月，她走了",
-        "summary": "那一年，是2011年。 同事们刚刚知道依依生了女儿没两天，还来不及去祝贺，竟又突然接到噩耗：她走了！ 谁也想不到，这个刚为人母的24岁姑娘，在凌...",
-        "picUrl": "http://upload-images.jianshu.io/upload_images/11425432-f10db8f6d9553074.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240",
-        "author": "繁花朵朵开",
-        "comment": 43,
-        "like": 31
-      },{
-        "title": "那年七月，她走了",
-        "summary": "那一年，是2011年。 同事们刚刚知道依依生了女儿没两天，还来不及去祝贺，竟又突然接到噩耗：她走了！ 谁也想不到，这个刚为人母的24岁姑娘，在凌...",
-        "picUrl": "http://upload-images.jianshu.io/upload_images/11425432-f10db8f6d9553074.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240",
-        "author": "繁花朵朵开",
-        "comment": 43,
-        "like": 31
-      },
-      {
-        "title": "那年七月，她走了",
-        "summary": "那一年，是2011年。 同事们刚刚知道依依生了女儿没两天，还来不及去祝贺，竟又突然接到噩耗：她走了！ 谁也想不到，这个刚为人母的24岁姑娘，在凌...",
-        "picUrl": "http://upload-images.jianshu.io/upload_images/11425432-f10db8f6d9553074.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240",
-        "author": "繁花朵朵开",
-        "comment": 43,
-        "like": 31
-      },
-      {
-        "title": "那年七月，她走了",
-        "summary": "那一年，是2011年。 同事们刚刚知道依依生了女儿没两天，还来不及去祝贺，竟又突然接到噩耗：她走了！ 谁也想不到，这个刚为人母的24岁姑娘，在凌...",
-        "picUrl": "http://upload-images.jianshu.io/upload_images/11425432-f10db8f6d9553074.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240",
-        "author": "繁花朵朵开",
-        "comment": 43,
-        "like": 31
-      },
-      {
-        "title": "那年七月，她走了",
-        "summary": "那一年，是2011年。 同事们刚刚知道依依生了女儿没两天，还来不及去祝贺，竟又突然接到噩耗：她走了！ 谁也想不到，这个刚为人母的24岁姑娘，在凌...",
-        "picUrl": "http://upload-images.jianshu.io/upload_images/11425432-f10db8f6d9553074.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240",
-        "author": "繁花朵朵开",
-        "comment": 43,
-        "like": 31
-      }]
-    }
-  }
-  ctx.body = msg;
-  await next();
-})
 
 route.get('/checkLogin', async(ctx, next) => {
   ctx.set('Content-Type', 'application/json');
@@ -167,7 +75,7 @@ route.get('/checkLogin', async(ctx, next) => {
       _id: uid
     });
     if (resultUser !== null) {
-      ctx.body =  ctx.body = returnJSON('success', {
+      ctx.body = returnJSON('success', {
         userInfo: {
           username: resultUser.username,
           pseudonym: resultUser.pseudonym,
@@ -177,12 +85,74 @@ route.get('/checkLogin', async(ctx, next) => {
         }
       });
     } else {
-      ctx.body =  ctx.body = returnJSON('failed', {});
+      ctx.body = returnJSON('failed', {});
     }
   } else {
     ctx.body = returnJSON('failed', {});
   }
   
+})
+// picList: data.picList,
+//     articleList: data.articleList,
+//     recommendList: data.recommendList,
+//     writerList: data.writerList
+route.get('/init', async(ctx, next) => {
+  let articleList = await Article.find({}, null, {
+    limit: 5
+  });
+  ctx.body = returnJSON('success', {
+    "picList": [{
+      "picName": "手绘",
+      "picUrl": "//upload.jianshu.io/collections/images/283250/%E6%BC%AB%E7%94%BB%E4%B8%93%E9%A2%98.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/64/h/64"
+    }, {
+      "picName": "读书",
+      "picUrl": "//upload.jianshu.io/collections/images/4/sy_20091020135145113016.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/64/h/64"
+    }, {
+      "picName": "手绘",
+      "picUrl": "//upload.jianshu.io/collections/images/283250/%E6%BC%AB%E7%94%BB%E4%B8%93%E9%A2%98.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/64/h/64"
+    }, {
+      "picName": "读书",
+      "picUrl": "//upload.jianshu.io/collections/images/4/sy_20091020135145113016.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/64/h/64"
+    }, {
+      "picName": "手绘",
+      "picUrl": "//upload.jianshu.io/collections/images/283250/%E6%BC%AB%E7%94%BB%E4%B8%93%E9%A2%98.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/64/h/64"
+    }, {
+      "picName": "读书",
+      "picUrl": "//upload.jianshu.io/collections/images/4/sy_20091020135145113016.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/64/h/64"
+    }, {
+      "picName": "手绘",
+      "picUrl": "//upload.jianshu.io/collections/images/283250/%E6%BC%AB%E7%94%BB%E4%B8%93%E9%A2%98.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/64/h/64"
+    }],
+    articleList,
+    "recommendList": [{
+      "id": 1,
+      "imgUrl": "http://ouck2t8ui.bkt.clouddn.com/7days.png"
+    }, {
+      "id": 2,
+      "imgUrl": "http://ouck2t8ui.bkt.clouddn.com/30days.png"
+    }, {
+      "id": 3,
+      "imgUrl": "http://ouck2t8ui.bkt.clouddn.com/prefer.png"
+    }, {
+      "id": 4,
+      "imgUrl": "http://ouck2t8ui.bkt.clouddn.com/school.png"
+    }, {
+      "id": 5,
+      "imgUrl": "http://ouck2t8ui.bkt.clouddn.com/rights.png"
+    }],
+    "writerList": [
+      {
+        "avator": "http://upload.jianshu.io/users/upload_avatars/3343569/93161bfa-dda9-49ee-88e1-a85ec4227232.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96",
+        "name": "吴晓波",
+        "desc": "写了515k字 · 10.5k喜欢"
+      },
+      {
+        "avator": "http://upload.jianshu.io/users/upload_avatars/4263857/34d7b217-7338-48fe-81a1-98367fecdbee.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96",
+        "name": "王小麦",
+        "desc": "写了166.6k字 · 6.8k喜欢"
+      }
+    ]
+  })
 })
 
 route.get('/logout', async(ctx, next) => {
@@ -195,11 +165,9 @@ route.get('/logout', async(ctx, next) => {
     if (result !== null) {
       ctx.cookies.set('user', '', {
         maxAge: 0,
-        domain: 'localhost',
       })
       ctx.cookies.set('uid', '', {
         maxAge: 0,
-        domain: 'localhost',
       })
       ctx.body =  ctx.body = returnJSON('success', {});
     } else {
@@ -256,7 +224,7 @@ route.delete('/follow', async (ctx, next) => {
   const authorId = ctx.request.query  .id;
   if (!uid || !authorId) {
     ctx.body = returnJSON('failed', {
-      isFollowed: result
+      isFollowed: {}
     });
     await next();
   }
@@ -280,12 +248,12 @@ route.delete('/follow', async (ctx, next) => {
 })
 
 
-route.get('/init', async (ctx, next) => {
-  await User.updateMany({}, {
-    $pull: {
-      unCheckedNotifications: {},
-      checkedNotifications: {}
-    }
-  })
-})
+// route.get('/init', async (ctx, next) => {
+//   await User.updateMany({}, {
+//     $pull: {
+//       unCheckedNotifications: {},
+//       checkedNotifications: {}
+//     }
+//   })
+// })
 module.exports = route;

@@ -2,6 +2,7 @@ const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
 const Router = require('./route/index.js');
 const { connect } = require('./model/db');
+const { origin } = require('./utils/config');
 const app = new Koa();
 
 /**
@@ -16,7 +17,7 @@ const app = new Koa();
 app.use(bodyParser());
 
 app.use(async (ctx, next) => {
-  ctx.set("Access-Control-Allow-Origin", 'http://47.94.4.230');
+  ctx.set("Access-Control-Allow-Origin", origin);
   ctx.set("Access-Control-Allow-Credentials", true);
   ctx.set("Access-Control-Max-Age", 86400000);
   ctx.set("Access-Control-Allow-Methods", "OPTIONS, GET, PUT, POST, DELETE");

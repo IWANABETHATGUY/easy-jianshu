@@ -9,8 +9,8 @@ import { HOST } from '../../../libs/config';
 const changeHomeData = (data) => {
   return {
     type: CHANGE_HOME_ARTICLE,
-    articleList: data.articleList,
     picList: data.picList,
+    articleList: data.articleList,
     recommendList: data.recommendList,
     writerList: data.writerList
   }
@@ -39,7 +39,7 @@ export const loadMoreArticle = (page) => {
 
 export const initHomeData = () => {
   return (dispatch) => {
-    axios.get('/api/home.json')
+    axios.get(`${HOST}/user/init`)
       .then(res => {
         dispatch(changeHomeData(res.data.data));
       })

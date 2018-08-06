@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { 
-  initHomeData,
-  loadMoreArticle
-} from './store/actionCreater';
+import { actionCreater } from './store';
+import Recommend from './components/Recommend';
+import List from './components/List';
+import Writer from './components/Writer';
+import Topic from './components/Topic';
 import { 
   HomeWrapper,
   HomeLeft,
@@ -11,28 +12,24 @@ import {
   BannerImgWrapper,
   FindAll
 } from './style';
-import Recommend from './components/Recommend';
-import List from './components/List';
-import Writer from './components/Writer';
-import Topic from './components/Topic';
 
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      offsetHeight: 0,
+      scrollHeight: 0,
       clientHeight: 0,
       isLoadingMoreArticleList: false,
-      articlePage: 0
+      articlePage: 1
     }
   }
   
   componentDidMount() {
-    const { changeHomeData } = this.props;
+    const { initHomeData } = this.props;
     this.setState({
-      articlePage: 0
+      articlePage: 1
     });
-    changeHomeData();
+    initHomeData();
     this.setState({
       clientHeight: document.documentElement.clientHeight
     })
@@ -41,7 +38,7 @@ class Home extends Component {
     // 添加初次页面加载的监听函数， 获取整个页面的高度
     window.onload = () => {
       this.setState({
-        offsetHeight: document.documentElement.offsetHeight
+        scrollHeight: document.documentElement.scrollHeight
       })
     }
   }
@@ -74,20 +71,20 @@ class Home extends Component {
   handleWindowScroll = () => {
     const { 
       clientHeight, 
-      offsetHeight,
+      scrollHeight,
       isLoadingMoreArticleList
     } = this.state;
 
     const newScrollTop = document.documentElement.scrollTop;
-    const newOffsetHeight = document.documentElement.offsetHeight;
-    if (newOffsetHeight !== offsetHeight) {
+    const newScrollHeight = document.documentElement.scrollHeight;
+    if (newScrollHeight !== scrollHeight) {
       this.setState({
-        offsetHeight: newOffsetHeight,
+        scrollHeight: newScrollHeight,
         isLoadingMoreArticleList: false
       })
     }
 
-    if (newScrollTop + clientHeight + 300 >= offsetHeight && !isLoadingMoreArticleList) {
+    if (newScrollTop + clientHeight + 50 >= scrollHeight && !isLoadingMoreArticleList) {
       const { 
         loadArticleList
       } = this.props;
@@ -102,11 +99,11 @@ class Home extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  changeHomeData() {
-    dispatch(initHomeData());
+  initHomeData() {
+    dispatch(actionCreater.initHomeData());
   },
   loadArticleList(page) {
-    dispatch(loadMoreArticle(page));
+    dispatch(actionCreater.loadMoreArticle(page));
   }
 })
 

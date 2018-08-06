@@ -32,7 +32,7 @@ const Loading = () => {
         </ReactPlaceholder>
         {
             new Array(5).fill(0).map((item, index) => (
-              <ReactPlaceholder type="media" rows={4} ready={false} showLoadingAnimation={true}>
+              <ReactPlaceholder key={index} type="media" rows={4} ready={false} showLoadingAnimation={true}>
                 {''}
               </ReactPlaceholder>
             ))

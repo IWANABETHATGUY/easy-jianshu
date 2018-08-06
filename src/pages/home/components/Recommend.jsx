@@ -12,7 +12,7 @@ class Recommend extends Component {
             return (
               <RecommendItem
                 key={index}
-                imgUrl={item.imgUrl}
+                src={item.imgUrl}
               >
                 
               </RecommendItem>

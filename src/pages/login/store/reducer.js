@@ -5,7 +5,7 @@ import {
 } from './action';
 
 const defaultState = {
-  isLogin: true,
+  isLogin: false,
   loginPageIndex: 0,
   userInfo: {
     ucNotification: []
