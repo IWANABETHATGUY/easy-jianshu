@@ -16,10 +16,11 @@ const changeHomeData = (data) => {
   }
 }
 
-const loadMoreArticleList = (data) => {
+const loadMoreArticleList = (data, hasMore) => {
   return {
     type: LOAD_MORE_ARTICLELIST,
-    articleList: data.articleList
+    articleList: data.articleList,
+    hasMore
   }
 }
 
@@ -27,7 +28,13 @@ export const loadMoreArticle = (page) => {
   return (dispatch) => {
     axios.get(`${HOST}/article/articleList?page=${page}`)
       .then(res => {
-        dispatch(loadMoreArticleList(res.data.data));
+        if (res.data.msg === 'success') {
+          dispatch(loadMoreArticleList(res.data.data, true));
+        } else {
+          console.log('shit');
+          dispatch(loadMoreArticleList(res.data.data, false))
+        }
+        
       })
       .catch(err => {
         console.log(err);

@@ -2,16 +2,16 @@ import React, { Component } from 'react';
 import { 
   ListItem, 
   ListInfo, 
-  ListMeta,
-  LoadMore
+  ListMeta
 } from '../style';
+import LoadMoreBox from './LoadMoreBox';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 class List extends Component {
   
   render() {
-    const { articleList } = this.props;
+    const { articleList, isLoading, hasMore } = this.props;
     return (
       <div>
         {
@@ -57,7 +57,9 @@ class List extends Component {
             )
           })
         }
-        <LoadMore>没有更多了</LoadMore>
+        <LoadMoreBox
+          {...{isLoading, hasMore}}
+        />
       </div>
     );
   }

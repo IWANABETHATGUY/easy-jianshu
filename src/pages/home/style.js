@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 export const HomeWrapper = styled.div`
   overflow: hidden;
@@ -111,7 +111,6 @@ export const ListMeta = styled.div`
 export const RecommendWrapper = styled.div`
   margin-bottom: 30px;
   height: 280px;
-  width: 280px;
 `
 
 export const RecommendItem = styled.img`
@@ -205,17 +204,7 @@ export const FindAll = styled.a`
   border-radius: 4px;
 `
 
-export const LoadMore = styled.a`
-  display: block;
-  width: 100%;
-  height: 40px;
-  line-height: 40px;
-  margin: 30px 0;
-  background: #a5a5a5;
-  color: #fff;
-  text-align: center;
-  border-radius: 20px;
-`
+
 
 export const BackTop = styled.div`
   position: fixed;
@@ -225,4 +214,37 @@ export const BackTop = styled.div`
   height: 60px;
   line-height: 60px;
   text-align: center;
+`
+const Loading = keyframes`
+  0% {
+    transform: translateX(-50px);
+  }
+  50% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(50px);
+  }
+`
+
+export const LoadMore = styled.div`
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  margin: 30px 0;
+  background: #a5a5a5;
+  color: #fff;
+  text-align: center;
+  border-radius: 20px;
+`
+export const LoadingBall = styled.div`
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: ${props => props.background};
+  animation: ${Loading} 3s ${props => props.delay} infinite;
 `

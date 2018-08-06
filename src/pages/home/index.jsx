@@ -49,6 +49,8 @@ class Home extends Component {
 
 
   render() {
+    const { hasMore } = this.props;
+    const { isLoadingMoreArticleList } = this.state;
     return (
       <HomeWrapper>
         <HomeLeft>
@@ -58,7 +60,10 @@ class Home extends Component {
             src="//upload.jianshu.io/admin_banners/web_images/4338/8e2a58455e68291fd10f2a926ed793a016a66e2e.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/1250/h/540" alt=""/>
           </BannerImgWrapper>
           <Topic/>
-          <List/>
+          <List 
+            isLoading={isLoadingMoreArticleList}
+            hasMore={hasMore}
+          />
         </HomeLeft>
         <HomeRight>
           <Recommend/>
@@ -74,7 +79,7 @@ class Home extends Component {
       scrollHeight,
       isLoadingMoreArticleList
     } = this.state;
-
+    const { hasMore } = this.props;
     const newScrollTop = document.documentElement.scrollTop;
     const newScrollHeight = document.documentElement.scrollHeight;
     if (newScrollHeight !== scrollHeight) {
@@ -84,7 +89,7 @@ class Home extends Component {
       })
     }
 
-    if (newScrollTop + clientHeight + 50 >= scrollHeight && !isLoadingMoreArticleList) {
+    if ((newScrollTop + clientHeight + 50 >= scrollHeight) && !isLoadingMoreArticleList && hasMore) {
       const { 
         loadArticleList
       } = this.props;
@@ -98,6 +103,10 @@ class Home extends Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  hasMore: state.home.hasMore
+})
+
 const mapDispatchToProps = (dispatch) => ({
   initHomeData() {
     dispatch(actionCreater.initHomeData());
@@ -107,4 +116,4 @@ const mapDispatchToProps = (dispatch) => ({
   }
 })
 
-export default connect(null, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

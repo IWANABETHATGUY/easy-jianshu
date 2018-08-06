@@ -7,7 +7,8 @@ const defaultState = {
   picList: [], 
   articleList: [],
   recommendList: [],
-  writerList:[]
+  writerList:[],
+  hasMore: true
 }
 
 export default (state = defaultState, action) => {
@@ -18,12 +19,14 @@ export default (state = defaultState, action) => {
         articleList: action.articleList,
         picList: action.picList,
         recommendList: action.recommendList,
-        writerList: action.writerList
+        writerList: action.writerList,
+        hasMore: true
       }
     case LOAD_MORE_ARTICLELIST:
       return {
         ...state,
-        articleList: state.articleList.concat(action.articleList)
+        articleList: state.articleList.concat(action.articleList),
+        hasMore: action.hasMore
       }
     default:
       return state;
