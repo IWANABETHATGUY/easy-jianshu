@@ -99,9 +99,9 @@ class Comment extends Component {
                             <em>回复了你</em>
                             
                             <a className={classes.articleTitle}  
-                            // target="_blank"
-                            // {/* onClick={this.handleCheckNotification.bind(this, item.cid)} */} 
-                            // {/* href={`/detail/${item._id}`} */}
+                            target="_blank"
+                            onClick={this.handleCheckNotification.bind(this, item.cid)}
+                            href={`/detail/${item.articleId}#comment-${item._id}`} 
 
                             >{item.content}</a>
                           </div>
@@ -112,8 +112,9 @@ class Comment extends Component {
                           <div className={classes.comment}>
                             <em>回复了你的评论</em>
                             <a className={classes.articleTitle} 
-                            // href={`/detail/${item._id}`} target="_blank" 
-                            // onClick={this.handleCheckNotification.bind(this, item.cid)}
+                            target="_blank" 
+                            onClick={this.handleCheckNotification.bind(this, item.cid)}
+                            href={`/detail/${item.articleId}#comment-${item._id}`} 
                             >{`${item.rcontent}`}</a>
                           </div>
                         </Fragment>

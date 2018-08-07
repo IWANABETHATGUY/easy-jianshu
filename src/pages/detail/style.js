@@ -36,3 +36,10 @@ export const ImgContainer = styled.div`
   max-width: 700px;
   max-height: 445px;
 `
+export const CommentContainer = styled.div`
+  transition: background linear 2s;
+  &.tip {
+    transition: background linear 0s;
+    background: #eee;
+  }
+`

@@ -24,15 +24,17 @@ class App extends Component {
           <BrowserRouter>
             <ScrollToTop>
               <Fragment>
-                <Header/> 
-                <Switch>
-                  <Route path="/" exact component={Home}/>
-                  <Route path="/detail/:id" exact component={Detail}/>
-                  <Route path="/login" exact component={Login}/>
-                  <Route path="/writeArticle" exact component={WriteArticle}/>
-                  <Route path="/notification" component={Notification}/>
-                  <Route path="*" component={NotMatch}/>  
-                </Switch>
+                <Header style={{position: 'fixed'}}/> 
+                <div style={{marginTop: '58px'}}>
+                  <Switch>
+                    <Route path="/" exact component={Home}/>
+                    <Route path="/detail/:id" exact component={Detail}/>
+                    <Route path="/login" exact component={Login}/>
+                    <Route path="/writeArticle" exact component={WriteArticle}/>
+                    <Route path="/notification" component={Notification}/>
+                    <Route path="*" component={NotMatch}/>  
+                  </Switch>
+                </div>
               </Fragment> 
             </ScrollToTop>
           </BrowserRouter>

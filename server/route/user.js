@@ -177,7 +177,7 @@ route.get('/logout', async(ctx, next) => {
 
 
 route.get('/isFollowed', async (ctx, next) => {
-  const from = ctx.request.query.from;
+  const from = ctx.cookies.get('uid');
   const to = ctx.request.query.to;
   const author = await User.findById(to);
   const result = await User.isFollowed(author, from);

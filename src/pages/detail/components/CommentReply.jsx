@@ -5,7 +5,7 @@ import Avatar from '@material-ui/core/Avatar';
 import List from '@material-ui/core/List';
 import { withStyles } from '@material-ui/core/styles';
 import CommentInfo from './CommentInfo';
-
+import { CommentContainer } from '../style';
 const style = theme => ({
   commentReplyContainer: {
     borderLeft: '3px solid #000'
@@ -52,7 +52,8 @@ class CommentReply extends Component {
               {
                 replies.map((item, index) => {
                   return (
-                    <div
+                    <CommentContainer
+                      id={`comment-${item._id}`}
                       key={item._id}
                     >
                       <div 
@@ -80,7 +81,7 @@ class CommentReply extends Component {
                       onReplyClick={this.handleReplyClick.bind(this, item.pseudonym, item._id)}
                       info={{like: item.like,  time: item.meta.createdAt}}
                     />
-                  </div>
+                  </CommentContainer>
                   )
                 })
               }

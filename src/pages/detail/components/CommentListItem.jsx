@@ -9,6 +9,7 @@ import { actionCreater } from '../store';
 import CommentReply from './CommentReply';
 import CommentInfo from './CommentInfo';
 import CommentInput from './CommentInput';
+import { CommentContainer } from '../style';
 
 class CommentListItem extends Component {
   constructor(props) {
@@ -26,23 +27,26 @@ class CommentListItem extends Component {
 
     return (
       <div>
-        <ListItem>
-          <Avatar>
-            <i className="iconfont">&#xe6a4;</i>
-          </Avatar>
-          <ListItemText primary={comment.pseudonym}  />
-        </ListItem>
-        <div style={{padding: '0 24px', margin: '10px 0'}}>
-          {comment.content}
-        </div>
-        <CommentInfo 
-          bordered={false}
-          thisId={comment._id}
-          onReplyClick={this.handleFReplyClick.bind(this, comment._id)}
-          info={{like: comment.like, time: comment.meta.createdAt}}
-          userId={comment.userID}
-          loginUserID={loginUserID}
-        />
+        <CommentContainer id={`comment-${comment._id}`}>
+          <ListItem>
+            <Avatar>
+              <i className="iconfont">&#xe6a4;</i>
+            </Avatar>
+            <ListItemText primary={comment.pseudonym}  />
+          </ListItem>
+          <div style={{padding: '0 24px', margin: '10px 0'}}>
+            {comment.content}
+          </div>
+          <CommentInfo 
+            bordered={false}
+            thisId={comment._id}
+            onReplyClick={this.handleFReplyClick.bind(this, comment._id)}
+            info={{like: comment.like, time: comment.meta.createdAt}}
+            userId={comment.userID}
+            loginUserID={loginUserID}
+          />
+        </CommentContainer>
+        
         <CommentReply 
           replies={comment.commentReplyList}
           onReplayClick={this.handleReplyClick}

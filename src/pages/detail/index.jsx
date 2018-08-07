@@ -68,6 +68,20 @@ class Detail extends Component {
     getArticle(id, userId);
     changeArticleId(id);
     getCommentList(id, 1);
+    window.addEventListener('load', () => {
+      const hash = window.location.hash;
+      if (hash !== "") {
+        window.location.hash = "";
+        window.location.hash = hash;
+        let comment = document.getElementById(hash.slice(1));
+        if (comment !== null) {
+          comment.classList.add('tip');
+          setTimeout(() => {
+            comment.classList.remove('tip');
+          },0)
+        }
+      }
+    })
   }
   
   render() {
