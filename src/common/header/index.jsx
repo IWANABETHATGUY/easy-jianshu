@@ -19,6 +19,9 @@ import {
 import { 
   actionCreater as headerActionCreater
 } from './store';
+import { 
+  actionCreater as homeActionCreater
+} from '../../pages/home/store';
 import Badge from '@material-ui/core/Badge';
 import { withStyles } from '@material-ui/core/styles';
 import {
@@ -39,8 +42,9 @@ const styles = theme => ({
 })
 class Header extends Component {
 
-  componentWillMount() {
-    const { handleCheckLogin, userInfo } = this.props;
+  componentDidMount() {
+    const { handleCheckLogin, initHomeData } = this.props;
+    initHomeData();
     handleCheckLogin();
   }
 
@@ -239,6 +243,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     handleChangeLoginPage(index) {
       dispatch(loginActionCreater.changeLoginPage(index));
+    },
+    initHomeData() {
+      dispatch(homeActionCreater.initHomeData());
     }
   }
 }

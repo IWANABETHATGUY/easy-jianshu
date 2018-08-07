@@ -22,7 +22,7 @@ class CommentListItem extends Component {
   
   render() {
     const { commentBlockShow, prefix, cid } = this.state;
-    const { index, commentIndex, comment } = this.props;
+    const { index, commentIndex, comment, loginUserID } = this.props;
 
     return (
       <div>
@@ -39,7 +39,9 @@ class CommentListItem extends Component {
           bordered={false}
           thisId={comment._id}
           onReplyClick={this.handleFReplyClick.bind(this, comment._id)}
-          info={{like: comment.like, time: comment.meta.createdAt}} 
+          info={{like: comment.like, time: comment.meta.createdAt}}
+          userId={comment.userID}
+          loginUserID={loginUserID}
         />
         <CommentReply 
           replies={comment.commentReplyList}
@@ -86,7 +88,8 @@ class CommentListItem extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  commentIndex: state.detail.commentIndex
+  commentIndex: state.detail.commentIndex,
+  loginUserID: state.login.userInfo.userID
 })
 
 const mapDispatchToProps = (dispatch) => {

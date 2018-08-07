@@ -22,7 +22,8 @@ class CommentInfo extends Component {
 
   
   render() {
-    const { classes, info, onReplyClick, bordered, thisId } = this.props;
+    const { classes, info, onReplyClick, bordered, thisId, userId, loginUserID } = this.props;
+    
     return (
       <div className={classes.replayCommentInfoContainer}
         style={bordered ? {borderBottom: '1px dashed #ccc',} : null}
@@ -35,8 +36,13 @@ class CommentInfo extends Component {
           mini
           onClick={onReplyClick}
         >回复</Button>
-        <SimpleMenu
-          thisId={thisId}/>
+        {
+          userId === loginUserID && (
+            <SimpleMenu
+              thisId={thisId}
+            />
+          )
+        }
       </div>
     );
   }

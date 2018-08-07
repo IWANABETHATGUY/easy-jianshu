@@ -97,9 +97,6 @@ route.get('/checkLogin', async(ctx, next) => {
 //     recommendList: data.recommendList,
 //     writerList: data.writerList
 route.get('/init', async(ctx, next) => {
-  let articleList = await Article.find({}, null, {
-    limit: 5
-  });
   ctx.body = returnJSON('success', {
     "picList": [{
       "picName": "手绘",
@@ -123,7 +120,6 @@ route.get('/init', async(ctx, next) => {
       "picName": "手绘",
       "picUrl": "//upload.jianshu.io/collections/images/283250/%E6%BC%AB%E7%94%BB%E4%B8%93%E9%A2%98.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/64/h/64"
     }],
-    articleList,
     "recommendList": [{
       "id": 1,
       "imgUrl": "http://ouck2t8ui.bkt.clouddn.com/7days.png"

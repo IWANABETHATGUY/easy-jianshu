@@ -1,6 +1,7 @@
 import { 
   CHANGE_HOME_ARTICLE, 
-  LOAD_MORE_ARTICLELIST 
+  LOAD_MORE_ARTICLELIST,
+  INIT_ARTICLE_LIST 
 } from './action';
 
 const defaultState = {
@@ -16,7 +17,6 @@ export default (state = defaultState, action) => {
     case CHANGE_HOME_ARTICLE:
       return {
         ...state,
-        articleList: action.articleList,
         picList: action.picList,
         recommendList: action.recommendList,
         writerList: action.writerList,
@@ -27,6 +27,11 @@ export default (state = defaultState, action) => {
         ...state,
         articleList: state.articleList.concat(action.articleList),
         hasMore: action.hasMore
+      }
+    case INIT_ARTICLE_LIST:
+      return {
+        ...state,
+        articleList: []
       }
     default:
       return state;

@@ -25,11 +25,12 @@ class Home extends Component {
   }
   
   componentDidMount() {
-    const { initHomeData } = this.props;
+    const { initArticleList, loadArticleList } = this.props;
     this.setState({
       articlePage: 1
     });
-    initHomeData();
+    initArticleList();
+    loadArticleList(this.state.articlePage);
     this.setState({
       clientHeight: document.documentElement.clientHeight
     })
@@ -108,11 +109,11 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  initHomeData() {
-    dispatch(actionCreater.initHomeData());
-  },
   loadArticleList(page) {
     dispatch(actionCreater.loadMoreArticle(page));
+  },
+  initArticleList() {
+    dispatch(actionCreater.initArticleList());
   }
 })
 

@@ -1,6 +1,7 @@
 import {
   CHANGE_HOME_ARTICLE,
-  LOAD_MORE_ARTICLELIST
+  LOAD_MORE_ARTICLELIST,
+  INIT_ARTICLE_LIST
 } from './action';
 import axios from 'axios';
 import { HOST } from '../../../libs/config';
@@ -10,9 +11,14 @@ const changeHomeData = (data) => {
   return {
     type: CHANGE_HOME_ARTICLE,
     picList: data.picList,
-    articleList: data.articleList,
     recommendList: data.recommendList,
     writerList: data.writerList
+  }
+}
+
+export const initArticleList = () => {
+  return {
+    type: INIT_ARTICLE_LIST
   }
 }
 
