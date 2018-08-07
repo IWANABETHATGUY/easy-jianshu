@@ -13,6 +13,8 @@ const styles = theme => ({
 class CommentList extends Component {
 
   componentDidMount() {
+
+      
   }
   
   render() {

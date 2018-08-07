@@ -100,7 +100,7 @@ class Comment extends Component {
                             
                             <a className={classes.articleTitle}  
                             target="_blank"
-                            onClick={this.handleCheckNotification.bind(this, item.cid)}
+                            // onClick={this.handleCheckNotification.bind(this, item.cid)}
                             href={`/detail/${item.articleId}#comment-${item._id}`} 
 
                             >{item.content}</a>
@@ -113,7 +113,7 @@ class Comment extends Component {
                             <em>回复了你的评论</em>
                             <a className={classes.articleTitle} 
                             target="_blank" 
-                            onClick={this.handleCheckNotification.bind(this, item.cid)}
+                            // onClick={this.handleCheckNotification.bind(this, item.cid)}
                             href={`/detail/${item.articleId}#comment-${item._id}`} 
                             >{`${item.rcontent}`}</a>
                           </div>
