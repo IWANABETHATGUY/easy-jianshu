@@ -9,9 +9,9 @@ const LoadMoreBox = (props) => {
           (
             <LoadMore style={{ visibility: isLoading ? 'visible' : 'hidden'}}>
               <div style={{position: 'relative', height: '20px', width: '20px'}}>
-                <LoadingBall background="red" delay="0s"/>
-                <LoadingBall background="yellow" delay="1s"/>
-                <LoadingBall background="blue" delay="2s"/>
+                <LoadingBall background="red" delay="-1s"/>
+                <LoadingBall background="yellow" delay="-0.5s"/>
+                <LoadingBall background="blue" delay="0s"/>
               </div>
             </LoadMore>
           )

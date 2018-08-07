@@ -217,13 +217,19 @@ export const BackTop = styled.div`
 `
 const Loading = keyframes`
   0% {
-    transform: translateX(-50px);
+    transform: translateX(-30px) scale(0.7);
+    z-index: 1;
+  }
+  25% {
+    transform: translateX(0) scale(1.3);
+    z-index: 20;
   }
   50% {
-    transform: translateX(0);
+    transform: translateX(30px) scale(0.7);
+    z-index: 2;
   }
   100% {
-    transform: translateX(50px);
+    transform: translateX(-30px);
   }
 `
 
@@ -246,5 +252,5 @@ export const LoadingBall = styled.div`
   width: 20px;
   border-radius: 50%;
   background: ${props => props.background};
-  animation: ${Loading} 3s ${props => props.delay} infinite;
+  animation: ${Loading} 2s ${props => props.delay} ease-in-out infinite;
 `
