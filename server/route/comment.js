@@ -106,9 +106,9 @@ router.get('/commentList', async (ctx, next) => {
 //   }
 // })
 
-router.get('/test', async (ctx, next) => {
-  await Comment.updateMany({}, {commentList: []});
-})
+// router.get('/test', async (ctx, next) => {
+//   await Comment.updateMany({}, {commentList: []});
+// })
 
 router.delete('/delete', async (ctx, next) => {
   const id = ctx.request.query.id;

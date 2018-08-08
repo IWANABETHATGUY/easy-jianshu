@@ -77,36 +77,5 @@ Notification.pre('save', async function(next) {
 Notification.methods = {
   
 }
-// Comment.pre('remove', async function(next) {
-//   if (this.replyToC) {
-//     await exComment.update({_id: this.underCommentID}, {
-//       $inc: {
-//         replyCount: -1
-//       },
-//       $pull: {
-//         replyList: this._id
-//       }
-//     })
-//     await Article.update({_id: this.ArticleID}, {
-//       $inc: {
-//         comment: -1
-//       },
-//     })
-//   } else {
-//     console.log(this.replyCount);
-//     await Article.update({_id: this.ArticleID}, {
-//       $inc: {
-//         comment: -(this.replyCount + 1),
-//         ucCount: -1
-//       },
-//       $pull: {
-//         commentList: this._id
-//       }
-//     })
-//     exComment.deleteMany({underCommentID: this._id});
-//     exComment.deleteOne({_id: this._id});
-//   }
-//   await next();
-// })
 
 module.exports = mongoose.model('Notification', Notification);

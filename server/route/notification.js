@@ -14,28 +14,33 @@ const getNotificationList = (type, notificationList) => {
       promiseList = notificationList.map(async (item, index) => {
         const notification = await Notification.findById(item.id);
         const article = await Article.findById(notification.contentId);
-        return await {
-          pseudonym: article.pseudonym,
-          title: article.title,
-          meta: article.meta,
-          _id: article._id,
-          cid: item.id
+        if (article !== null) {
+          return await {
+            pseudonym: article.pseudonym,
+            title: article.title,
+            meta: article.meta,
+            _id: article._id,
+            cid: item.id
+          }
+        } else {
+          return {}
         }
+        
       })
       break;
     case 'acomment':
       promiseList = notificationList.map(async (item, index) => {
         const notification = await Notification.findById(item.id);
         const comment = await Comment.findById(notification.contentId);
-        const article = await Article.findById(comment.ArticleID);
+        let article = comment ? await Article.findById(comment.ArticleID) : null;
         return await {
           type: 'acomment',
-          pseudonym: comment.pseudonym,
-          title: article.title,
-          articleId: article._id,
-          content: comment.content,
-          meta: comment.meta,
-          _id: comment._id,
+          pseudonym: comment ? comment.pseudonym : "",
+          title: article ? article.title : "",
+          articleId: article ? article._id : "",
+          content: comment ? comment.content : "",
+          meta: comment ? comment.meta : {},
+          _id: comment ? comment._id : "",
           cid: item.id
         }
       })

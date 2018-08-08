@@ -40,6 +40,10 @@ const Comment = new Schema({
     type: ObjectId,
     default: null
   },
+  replyUserID: {
+    type: ObjectId,
+    default: null
+  },
   userID: {
     type: ObjectId,
     required: true
@@ -107,7 +111,7 @@ Comment.pre('save', async function(next) {
           userID: this.userID
         });
         let replyUser = await exComment.findById(this.CommentID);
-        console.log(replyUser.userID);
+        this.replyUserID = replyUser.userID;
         await User.update({_id: replyUser.userID}, {
           $push: {
             unCheckedNotifications: {
@@ -126,6 +130,7 @@ Comment.pre('save', async function(next) {
 })
 
 Comment.pre('remove', async function(next) {
+  let resNotification = await Notification.findOne({contentId: this._id});
   if (this.replyToC) {
     await exComment.update({_id: this.underCommentID}, {
       $inc: {
@@ -140,19 +145,40 @@ Comment.pre('remove', async function(next) {
         comment: -1
       },
     })
+    await User.update({_id: this.replyUserID}, {
+      $pull: {
+        unCheckedNotifications: {
+          id: resNotification._id
+        }
+      }
+    })
   } else {
-    await Article.update({_id: this.ArticleID}, {
+    const resArticle = await Article.findById(this.ArticleID);
+    await resArticle.update({
       $inc: {
-        comment: -(this.replyCount + 1),
+        comment: -1,
         ucCount: -1
       },
       $pull: {
         commentList: this._id
       }
     })
-    exComment.deleteMany({underCommentID: this._id});
-    exComment.deleteOne({_id: this._id});
+    await User.update({_id: resArticle.userID}, {
+      $pull: {
+        unCheckedNotifications: {
+          id: resNotification._id
+        }
+      }
+    })
+    const underComments = await exComment.find({underCommentID: this._id});
+    await underComments.forEach(async(item) => {
+      if (item.replyToC) {
+        await item.remove();
+      }
+    });
+    await exComment.deleteOne({_id: this._id});
   }
+  await resNotification.remove();
   await next();
 })
 

@@ -85,7 +85,7 @@ class Detail extends Component {
             comment.classList.add('tip');
             setTimeout(() => {
               comment.classList.remove('tip');
-            }, 1);
+            }, 100);
             clearInterval(load);
           }
         }, 100)
