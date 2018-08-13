@@ -37,7 +37,6 @@ export const loadMoreArticle = (page) => {
         if (res.data.msg === 'success') {
           dispatch(loadMoreArticleList(res.data.data, true));
         } else {
-          console.log('shit');
           dispatch(loadMoreArticleList(res.data.data, false))
         }
         

@@ -209,7 +209,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     handleInputFocused(list) {
       if (list.length <= 0) {
-        console.log(headerActionCreater);
         dispatch(headerActionCreater.initSearchList());
       }
       const action = headerActionCreater.changeSearchFoucsed(true);

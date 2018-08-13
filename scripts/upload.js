@@ -33,11 +33,11 @@ const doUpload = (key, file) => {
 }
 //调用uploadFile上传
 
-const scripts = fs.readdirSync(path.join(__dirname, '../build/js'));
+const scripts = fs.readdirSync(path.join(__dirname, '../build/static/js'));
 const styles = fs.readdirSync(path.join(__dirname, '../build/static/css'));
 
 const uploadJS = scripts.map(file => {
-  return doUpload('js/' + file, path.join(__dirname, '../build/js', file));
+  return doUpload('static/js/' + file, path.join(__dirname, '../build/static/js', file));
 });
 
 const uploadCSS = styles.map(file => {
