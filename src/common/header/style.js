@@ -209,8 +209,10 @@ export const AvatorContainer = styled.div`
   }
   .drop-list {
     position: absolute;
+    z-index: 999;
     top: 95%;
     left: 0px;
+    background: #fff;
     display: none;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
     padding: 5px 0;
@@ -218,10 +220,10 @@ export const AvatorContainer = styled.div`
     min-width: 160px;
   }
   .drop-list-item {
+    padding-left:40px;
     font-size: 14px;
     font-weight: 400;
     color: #222;
-    text-align: center;
     height: 30px;
     line-height: 30px;
     &:hover {

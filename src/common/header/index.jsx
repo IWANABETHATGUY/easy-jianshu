@@ -84,14 +84,23 @@ class Header extends Component {
               </Link>
             ) : (
               <AvatorContainer>
-                <img src="http://upload.jianshu.io/users/upload_avatars/4802726/52eb8675-453d-4822-95ef-4e3db9610866?imageMogr2/auto-orient/strip|imageView2/1/w/120/h/120"
+                <img src={userInfo.avatar}
                   alt="" />
                 <i className="iconfont">&#xe6e9;</i>
                 <DropList
                   listClassName="drop-list"
                   itemClassName="drop-list-item"
-                  listData={['注销', '个人中心']}
-                  actionList={[handleLogOut, this.handlePersonalCenter]}
+                  listData={[
+                    {
+                      tag: '个人中心',
+                      icon: '&#xe66c;'
+                    },
+                    {
+                      tag: '注销',
+                      icon: '&#xef05;'
+                    }
+                  ]}
+                  actionList={[this.handlePersonalCenter, handleLogOut]}
                 />
               </AvatorContainer>
             )
@@ -122,8 +131,9 @@ class Header extends Component {
                   <NavItem className="left download">
                     <i className="iconfont menu">&#xe748;</i>关注
                   </NavItem>
-                  <NavItem className="left download" onClick={() => this.props.history.push('/notification')}>
-                  
+                  <NavItem 
+                    className={['left', 'download', userInfo.ucNotification && userInfo.ucNotification.length ? 'animated tada' : ''].join(' ')} 
+                    onClick={() => this.props.history.push('/notification')}>
                   {
                      userInfo.ucNotification && userInfo.ucNotification.length ? (
                       <Badge badgeContent={userInfo.ucNotification.length} color="secondary" className={classes.badge}>

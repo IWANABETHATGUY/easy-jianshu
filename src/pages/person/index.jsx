@@ -7,7 +7,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { withStyles } from '@material-ui/core/styles';
 import { NotificationWrapper } from './style';
-import Comment from './pages/comment/index.jsx';
+import Info from './pages/personalnfo/index.jsx';
 import Follow from './pages/follow/index.jsx';
 import { connect } from 'react-redux';
 
@@ -38,12 +38,10 @@ const styles = {
 class Notification extends Component {
 
   render() {
-    const { match, classes, location, ucNotification, isLogin } = this.props;
-    const commentCount = ucNotification.filter(item => item.type !== 'article').length;
-    const articleCount = ucNotification.length - commentCount;
+    const { match, classes, location, isLogin } = this.props;
     const listItems = [
-      {content: '评论', path: 'comment', icon: `&#xe600;`, count: commentCount}, 
-      {content: '关注', path: 'follow', icon: `&#xe668;`, count: articleCount}
+      {content: '个人信息', path: 'info', icon: `&#xe66c;`}, 
+      {content: '关注', path: 'follow', icon: `&#xe668;`}
     ];
     return !isLogin ? <Redirect to="/login"/> : (
       <NotificationWrapper style={{display:'flex'}}>
@@ -58,11 +56,6 @@ class Notification extends Component {
                     <i className="iconfont" dangerouslySetInnerHTML={{__html: item.icon}}></i> 
                   </ListItemIcon>
                   <ListItemText primary={item.content} />
-                  {
-                    item.count > 0 && (<span className={classes.countBadge}>
-                      {item.count}
-                    </span>)
-                  }
                 </ListItem>
                 
               ))
@@ -70,12 +63,11 @@ class Notification extends Component {
           </List>
         </Card>
         <Card className={classes.contentContainer}>
-        <Switch>
-          <Route path={`${match.url}/comment`}  exact component={Comment}></Route>
-          <Route path={`${match.url}/follow`}  exact component={Follow}></Route>
-          <Route path="*" render={() => <Redirect to='/notification/comment'/>}></Route>
-        </Switch>
-          
+          <Switch>
+            <Route path={`${match.url}/follow`}  exact component={Follow}></Route>
+            <Route path={`${match.url}/info`}  exact component={Info}></Route>
+            <Route exact render={() => <Redirect to={`${match.url}/info`}/>}></Route>
+          </Switch>
         </Card>
       </NotificationWrapper>
     );

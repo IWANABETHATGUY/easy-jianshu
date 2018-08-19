@@ -1,4 +1,9 @@
 import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
+import { actionCreater } from './store';
+import { Redirect, withRouter } from 'react-router-dom';
+import axios from 'axios';
+import { HOST } from '../../libs/config';
 import { 
   LoginWrapper,
   LoginBox,
@@ -12,9 +17,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-import { connect } from 'react-redux';
-import { actionCreater } from './store';
-import { Redirect, withRouter } from 'react-router-dom';
+import FormHelperText from '@material-ui/core/FormHelperText';
+
 
 class Login extends Component {
 
@@ -34,7 +38,9 @@ class Login extends Component {
         },],
       showPassword: false,
       userName: '',
-      password: ''
+      password: '',
+      errorText: ['', ''],
+      errorStatus: [false, false],
     }
   }
 
@@ -43,6 +49,7 @@ class Login extends Component {
       [props]: event.target.value
     });
   }
+
 
   render() {
     const { 
@@ -81,18 +88,22 @@ class Login extends Component {
               <InputLabel htmlFor="adornment-user">用户名</InputLabel>
               <Input
                 id="adornment-user"
+                error={this.state.errorStatus[0]}
                 value={this.state.userName}
+                onFocus={this.handleInputFocus}
                 onChange={this.handleChange('userName')}
               />
-              
+              <FormHelperText className="error" style={{visibility: this.state.errorStatus[0] ? 'visible' : 'hidden'}}>{this.state.errorText[0]}</FormHelperText>
             </FormControl>
             <FormControl style={{width:'250px', marginBottom: '30px'}}>
               {/* className={classNames(classes.margin, classes.textField)} */}
               <InputLabel htmlFor="adornment-password">密码</InputLabel>
               <Input
+                error={this.state.errorStatus[1]}
                 id="adornment-password"
                 type={this.state.showPassword ? 'text' : 'password'}
                 value={this.state.password}
+                onFocus={this.handleInputFocus}
                 onChange={this.handleChange('password')}
                 onKeyDown={this.handleLoginKeyDown}
                 endAdornment={
@@ -110,6 +121,7 @@ class Login extends Component {
                   </InputAdornment>
                 }
               />
+              <FormHelperText className="error" style={{visibility: this.state.errorStatus[1] ? 'visible' : 'hidden'}}>{this.state.errorText[1]}</FormHelperText>
             </FormControl>
             <FormControl style={{width: '200px'}}>
               <Button variant="contained" color="primary" 
@@ -126,10 +138,13 @@ class Login extends Component {
 
     
   }
-
+  handleInputFocus = () => {
+    this.changeErrorOptions(['', ''], [false, false]);
+  }
   handleClickLogin = () => {
-    const { handleLogin } = this.props;
-    handleLogin(this.state.userName, this.state.password)
+    if (this.validate()) {
+      this.handleLogin(this.state.userName, this.state.password)
+    }
   }
   handleTabListItemClick = (url) => {
     const { match, history } = this.props;
@@ -143,10 +158,59 @@ class Login extends Component {
     });
   }
   handleLoginKeyDown = (e) => {
-    const { handleLogin } = this.props;
     if (e.keyCode === 13) {
-      handleLogin(this.state.userName, this.state.password)
+      this.handleLogin(this.state.userName, this.state.password);
     }
+  }
+  handleLogin = (username, password) => {
+    axios.post(`${HOST}/user/login`, {
+      username,
+      password
+    }, {
+      withCredentials: true
+    })
+    .then(res => {
+      switch (res.data.msg) {
+        case 'success':
+          const { handleLoginSuccess } = this.props;
+          handleLoginSuccess(res.data.data.userInfo);
+        break;
+        case 'failed':
+          this.changeErrorOptions(['', `输入密码错误，还剩${5 - res.data.data.time}次机会`], [false, true]);
+        break;
+        case 'locked':
+          this.changeErrorOptions(['', '该账户已经被锁定，请稍后再试'], [false, true]);
+        break;
+        case 'not exist':
+          this.changeErrorOptions(['', '该账户不存在'], [false, true]);
+        break;
+      }
+    }) 
+  }
+  changeErrorOptions = (texts, status) => {
+    this.setState({
+      errorText: texts,
+      errorStatus: status
+    })
+  }
+
+  validate = () => {
+    const {userName, password} = this.state;
+    const texts = [];
+    const status = [];
+    let pass = true;
+    if (userName === '') {
+      texts[0] = '请输入用户名';
+      status[0] = true;
+      pass = false;
+    }
+    if (password === '') {
+      texts[1] = '请输入密码';
+      status[1] = true;
+      pass = false;
+    }
+    this.changeErrorOptions(texts, status);
+    return pass;
   }
 }
 
@@ -156,8 +220,9 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  handleLogin(userName, password) {
-    dispatch(actionCreater.login(userName, password));
+  handleLoginSuccess(userInfo) {
+    dispatch(actionCreater.changeLoginStatus(true));
+    dispatch(actionCreater.changeUserInfo(userInfo));
   },
   handleTabListItemClick(index) {
     dispatch(actionCreater.changeLoginPage(index));

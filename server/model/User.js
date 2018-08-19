@@ -19,6 +19,10 @@ const User = new Schema({
     type: String,
     required: true
   },
+  avatar: {
+    type: String,
+    default: 'http://pdp7qkdlu.bkt.clouddn.com/avatar-default.png',
+  },
   checkedNotifications: {type: Array},
   unCheckedNotifications:{type: Array},
   followList: [ObjectId],
@@ -112,7 +116,7 @@ User.methods = {
           }
         };
 
-        if (user.loginAttempts + 1 >= MAX_ATTEMPT_TIMES) {
+        if (user.loginAttempts + 1 > MAX_ATTEMPT_TIMES) {
           if (!user.isLocked) {
             updates = {
               $set: {

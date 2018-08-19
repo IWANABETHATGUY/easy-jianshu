@@ -12,7 +12,8 @@ const DropList = (props) => {
               className={itemClassName}
               onClick={actionList[index]}
             >
-              {item}
+              <i className="iconfont" dangerouslySetInnerHTML={{__html: item.icon}}></i>
+              {item.tag}
             </li>
           ))
         }

@@ -11,32 +11,38 @@ route.post('/login', async (ctx, next) => {
   let resultUser = await User.findOne({
     username: body.username
   });
-  if (resultUser !== null && resultUser.lockUntil < Date.now()) {
-    let res = await resultUser.comparePassword(body.password, resultUser.password);
-    if (res) {
-      ctx.cookies.set('user', body.username, {
-        maxAge: 1000 * 3600000,
-      })
-      ctx.cookies.set('uid', resultUser._id, {
-        maxAge: 1000 * 3600000,
-      })
-      ctx.body = returnJSON('success', {
-        userInfo: {
-          username: resultUser.username,
-          pseudonym: resultUser.pseudonym,
-          meta: resultUser.meta,
-          userID: resultUser._id,
-          ucNotification: resultUser.unCheckedNotifications
-        }
-      });
+  if (resultUser !== null) {
+    if (resultUser.lockUntil < Date.now()) {
+      let res = await resultUser.comparePassword(body.password, resultUser.password);
+      if (res) {
+        ctx.cookies.set('user', body.username, {
+          maxAge: 1000 * 3600000,
+        })
+        ctx.cookies.set('uid', resultUser._id, {
+          maxAge: 1000 * 3600000,
+        })
+        ctx.body = returnJSON('success', {
+          userInfo: {
+            username: resultUser.username,
+            pseudonym: resultUser.pseudonym,
+            meta: resultUser.meta,
+            userID: resultUser._id,
+            ucNotification: resultUser.unCheckedNotifications,
+            avatar: resultUser.avatar
+          }
+        });
+      } else {
+        ctx.body = returnJSON('failed', {
+          time: resultUser.loginAttempts
+        });
+      }
+      await resultUser.incLoginAttempts(resultUser, res);
+      next();
     } else {
-      ctx.body = returnJSON('failed', {});
+      ctx.body = returnJSON('locked', {});
     }
-    await resultUser.incLoginAttempts(resultUser, res);
-    next();
-    
   } else {
-    ctx.body =  ctx.body = returnJSON('the account is not exist or is locked', {});
+    ctx.body = returnJSON('not exist', {});
     next();
   }
 })
@@ -81,7 +87,8 @@ route.get('/checkLogin', async(ctx, next) => {
           pseudonym: resultUser.pseudonym,
           meta: resultUser.meta,
           userID: resultUser._id,
-          ucNotification: resultUser.unCheckedNotifications
+          ucNotification: resultUser.unCheckedNotifications,
+          avatar: resultUser.avatar
         }
       });
     } else {

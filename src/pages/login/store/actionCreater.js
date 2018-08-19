@@ -6,14 +6,14 @@ import {
   CHANGE_USER_INFO
 } from './action';
 
-const changeLoginStatus = (status) => {
+export const changeLoginStatus = (status) => {
   return {
     type: CHANGE_LOGIN_STATUS,
     status
   }
 }
 
-const changeUserInfo = (userInfo) => {
+export const changeUserInfo = (userInfo) => {
   return {
     type: CHANGE_USER_INFO,
     userInfo
@@ -27,22 +27,6 @@ export const changeLoginPage = (index) => {
   }
 }
 
-export const login = (username, password) => {
-  return (dispatch) => {
-    axios.post(`${HOST}/user/login`, {
-      username,
-      password
-    }, {
-      withCredentials: true
-    })
-    .then(res => {
-      if (res.data.msg === 'success') {
-        dispatch(changeLoginStatus(true));
-        dispatch(changeUserInfo(res.data.data.userInfo));
-      }
-    })   
-  }
-}
 
 export const checkLogin = () => {
   return (dispatch) => {

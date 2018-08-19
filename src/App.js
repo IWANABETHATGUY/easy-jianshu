@@ -9,6 +9,7 @@ import Login from './pages/login/load';
 import Sign from './pages/sign/load';
 import WriteArticle from './pages/WriteArticle/load';
 import Notification from './pages/notification';
+import Person from './pages/person';
 import 'react-placeholder/lib/ReactPlaceholder';
 import 'antd/dist/antd.css';
 import ScrollToTop from './common/ScrollToTop';
@@ -34,6 +35,7 @@ class App extends Component {
                     <Route path="/writeArticle" exact component={WriteArticle}/>
                     <Route path="/notification" component={Notification}/>
                     <Route path="/signin" exact component={Sign}/>
+                    <Route path="/user/personalCenter" component={Person}/>
                     <Route path="*" component={NotMatch}/>  
                   </Switch>
                 </div>
