@@ -8,6 +8,9 @@ export const LoginWrapper = styled.div`
   bottom: 0;
   top: 56px;
   background: #eee;
+  & .error {
+    color: red;
+  }
 `
 
 export const LoginBox = styled.div`

@@ -57,19 +57,3 @@ export const logout = () => {
     })
   }
 }
-
-export const signIn = (username, password, confirmPassword) => {
-  return (dispatch) => {
-    axios.post(`${HOST}/user/signIn`, {
-      username,
-      password
-    })
-    .then(res => {
-      if (res.data.msg === 'success') {
-        dispatch(changeLoginPage(0));
-      } else {
-        alert("some thing wrong , register failed");
-      }
-    })   
-  }
-}

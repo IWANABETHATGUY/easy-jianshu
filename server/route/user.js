@@ -55,7 +55,7 @@ route.post('/signIn', async (ctx) => {
     username: body.username
   });
   if (result !== null) {
-    ctx.body =  ctx.body = returnJSON('this count has been register', []);
+    ctx.body =  ctx.body = returnJSON('registered', {});
   } else {
     const user = new User({
       username: body.username,
