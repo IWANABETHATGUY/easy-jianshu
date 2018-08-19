@@ -48,6 +48,10 @@ class Header extends Component {
     handleCheckLogin();
   }
 
+  handlePersonalCenter = () => {
+    this.props.history.push('/user/personalCenter')
+  }
+
   render() {
     const { 
       focus,
@@ -57,7 +61,6 @@ class Header extends Component {
       handleInputFocused,
       handleInputBlur,
       handleLogOut,
-      handleChangeLoginPage,
       classes
     } = this.props;
     return  (
@@ -75,9 +78,8 @@ class Header extends Component {
           
           {
             !isLogin ? (
-              <Link to="/login">
+              <Link to="/signIn">
                 <Button className="register"
-                  onClick={() => handleChangeLoginPage(1)}
                 >注册</Button>
               </Link>
             ) : (
@@ -88,8 +90,8 @@ class Header extends Component {
                 <DropList
                   listClassName="drop-list"
                   itemClassName="drop-list-item"
-                  listData={['注销']}
-                  actionList={[() => handleLogOut()]}
+                  listData={['注销', '个人中心']}
+                  actionList={[handleLogOut, this.handlePersonalCenter]}
                 />
               </AvatorContainer>
             )
@@ -99,7 +101,6 @@ class Header extends Component {
               <NavItem 
                 className="right active" 
                 to="/login"
-                onClick={() => handleChangeLoginPage(0)}
               >登录</NavItem>
             </Link>
             )
@@ -239,9 +240,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     handleLogOut() {
       dispatch(loginActionCreater.logout())
-    },
-    handleChangeLoginPage(index) {
-      dispatch(loginActionCreater.changeLoginPage(index));
     },
     initHomeData() {
       dispatch(homeActionCreater.initHomeData());

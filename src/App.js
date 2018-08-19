@@ -6,6 +6,7 @@ import { Switch, BrowserRouter, Route } from 'react-router-dom';
 import Home from './pages/home/load';
 import Detail from './pages/detail/load';
 import Login from './pages/login/load';
+import Sign from './pages/sign/load';
 import WriteArticle from './pages/WriteArticle/load';
 import Notification from './pages/notification';
 import 'react-placeholder/lib/ReactPlaceholder';
@@ -32,6 +33,7 @@ class App extends Component {
                     <Route path="/login" exact component={Login}/>
                     <Route path="/writeArticle" exact component={WriteArticle}/>
                     <Route path="/notification" component={Notification}/>
+                    <Route path="/signin" exact component={Sign}/>
                     <Route path="*" component={NotMatch}/>  
                   </Switch>
                 </div>

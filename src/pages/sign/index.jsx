@@ -13,10 +13,10 @@ import Input from '@material-ui/core/Input';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
-import { actionCreater } from './store';
+import { actionCreater } from '../login/store';
 import { Redirect, withRouter } from 'react-router-dom';
 
-class Login extends Component {
+class SignIn extends Component {
 
   constructor(props) {
     super(props);
@@ -24,17 +24,19 @@ class Login extends Component {
       pageItemList: [
         {
           tag: '登录',
-          active: true,
+          active: false,
           url: '/login'
         }, 
         {
           tag: '注册',
-          active: false,
+          active: true,
           url: '/signIn'
         },],
       showPassword: false,
+      showConfirmPassword: false,
       userName: '',
-      password: ''
+      password: '',
+      confirmPassword: ''
     }
   }
 
@@ -86,7 +88,7 @@ class Login extends Component {
               />
               
             </FormControl>
-            <FormControl style={{width:'250px', marginBottom: '30px'}}>
+            <FormControl style={{width:'250px', marginBottom: '10px'}}>
               {/* className={classNames(classes.margin, classes.textField)} */}
               <InputLabel htmlFor="adornment-password">密码</InputLabel>
               <Input
@@ -94,12 +96,11 @@ class Login extends Component {
                 type={this.state.showPassword ? 'text' : 'password'}
                 value={this.state.password}
                 onChange={this.handleChange('password')}
-                onKeyDown={this.handleLoginKeyDown}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="Toggle password visibility"
-                      onClick={this.handleToggleShowPassword}
+                      onClick={this.handleToggleShowPassword('showPassword')}
                     >
                     <i className="iconfont" 
                       style={{fontSize: '20px'}} 
@@ -111,11 +112,36 @@ class Login extends Component {
                 }
               />
             </FormControl>
+            <FormControl style={{width:'250px', marginBottom: '30px'}}>
+              {/* className={classNames(classes.margin, classes.textField)} */}
+              <InputLabel htmlFor="adornment-confirmPassword">确认密码</InputLabel>
+              <Input
+                id="adornment-confirmPassword"
+                type={this.state.showPassword ? 'text' : 'password'}
+                value={this.state.confirmPassword}
+                onChange={this.handleChange('confirmPassword')}
+                onKeyDown={this.handleSignKeyDown}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="Toggle password visibility"
+                      onClick={this.handleToggleShowPassword('showConfirmPassword')}
+                    >
+                    <i className="iconfont" 
+                      style={{fontSize: '20px'}} 
+                      dangerouslySetInnerHTML={{__html: this.state.showConfirmPassword ? '&#xe724;' : '&#xe723;'}}
+                    >
+                    </i>
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
             <FormControl style={{width: '200px'}}>
               <Button variant="contained" color="primary" 
                 onClick={this.handleClickLogin}
               >
-                登录
+                注册
               </Button>
             </FormControl>
           </TabPageBox>
@@ -128,42 +154,39 @@ class Login extends Component {
   }
 
   handleClickLogin = () => {
-    const { handleLogin } = this.props;
-    handleLogin(this.state.userName, this.state.password)
+    const { handleSignIn } = this.props;
+    handleSignIn(this.state.userName, this.state.password, this.state.confirmPassword);
   }
+
   handleTabListItemClick = (url) => {
     const { match, history } = this.props;
     if (match.url !== url) {
       this.props.history.push(url);
     }
   }
-  handleToggleShowPassword = () => {
+  handleToggleShowPassword = props => () => {
     this.setState({
-      showPassword: !this.state.showPassword
+      [props]: !this.state[props]
     });
   }
-  handleLoginKeyDown = (e) => {
-    const { handleLogin } = this.props;
+  handleSignInKeyDown = (e) => {
+    const { handleSignIn } = this.props;
     if (e.keyCode === 13) {
-      handleLogin(this.state.userName, this.state.password)
+      handleSignIn(this.state.userName, this.state.password, this.state.confirmPassword);
     }
   }
 }
 
 const mapStateToProps = (state) => ({
   isLogin: state.login.isLogin,
-  loginPageIndex: state.login.loginPageIndex
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  handleLogin(userName, password) {
-    dispatch(actionCreater.login(userName, password));
+  handleSignIn(userName, password, confirmPassword) {
+    dispatch(actionCreater.signIn(userName, password, confirmPassword));
   },
-  handleTabListItemClick(index) {
-    dispatch(actionCreater.changeLoginPage(index));
-  }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  withRouter(Login)
+  withRouter(SignIn)
 );
