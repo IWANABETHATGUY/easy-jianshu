@@ -149,7 +149,7 @@ class Login extends Component {
   handleTabListItemClick = (url) => {
     const { match, history } = this.props;
     if (match.url !== url) {
-      this.props.history.push(url);
+      history.push(url);
     }
   }
   handleToggleShowPassword = () => {
@@ -187,6 +187,8 @@ class Login extends Component {
         break;
         case 'not exist':
           this.changeErrorOptions(['', '该账户不存在'], [false, true]);
+        break;
+        default:
         break;
       }
     }) 

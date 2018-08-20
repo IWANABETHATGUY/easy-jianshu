@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import { HOST } from '../../libs/config';
 import { connect } from 'react-redux';
-import { actionCreater } from '../login/store';
 import { Redirect, withRouter } from 'react-router-dom';
 import { 
   LoginWrapper,

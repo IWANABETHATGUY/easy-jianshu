@@ -56,12 +56,25 @@ class Header extends Component {
     const socket = io.connect('http://localhost:8080');
     socket.on('update', (data)=> {
       updateNotification()
-    })
+    });
     handleCheckLogin(socket);
     initSocket(socket);
-
   }
-
+  shouldComponentUpdate(nextProps) {
+    const { userInfo } = this.props;
+    let beforeLength = userInfo.ucNotification && userInfo.ucNotification.length;
+    let afterLength = nextProps.userInfo.ucNotification && nextProps.userInfo.ucNotification.length;
+    if (beforeLength < afterLength) {
+      if (this.NotificationBlock) {
+        this.NotificationBlock.classList.remove('tada');
+        setTimeout(() => {
+          this.NotificationBlock.classList.add('tada');
+        }, 10);
+      }
+    }
+    // console.log(nextProps.userInfo.ucNotification.length === userInfo.ucNotification.length);
+    return true;
+  }
   handlePersonalCenter = () => {
     this.props.history.push('/user/personalCenter')
   }
@@ -147,8 +160,10 @@ class Header extends Component {
                     <i className="iconfont menu">&#xe748;</i>关注
                   </NavItem>
                   <NavItem 
-                    className={['left', 'download', userInfo.ucNotification && userInfo.ucNotification.length ? 'animated tada' : ''].join(' ')} 
-                    onClick={() => this.props.history.push('/notification')}>
+                    className={['left', 'download', 'animated', userInfo.ucNotification && userInfo.ucNotification.length ? 'tada' : ''].join(' ')} 
+                    onClick={() => this.props.history.push('/notification')}
+                    innerRef={noti => {this.NotificationBlock = noti}}
+                  >
                   {
                      userInfo.ucNotification && userInfo.ucNotification.length ? (
                       <Badge badgeContent={userInfo.ucNotification.length} color="secondary" className={classes.badge}>
