@@ -1,7 +1,9 @@
 import {
   CHANGE_LOGIN_STATUS, 
   CHANGE_LOGIN_PAGE,
-  CHANGE_USER_INFO
+  CHANGE_USER_INFO,
+  INIT_SOCKET,
+  CHANGE_NOTIFICATION
 } from './action';
 
 const defaultState = {
@@ -9,7 +11,8 @@ const defaultState = {
   loginPageIndex: 0,
   userInfo: {
     ucNotification: []
-  }
+  },
+  socketInstance: null
 }
 
 export default (state = defaultState, action) => {
@@ -28,6 +31,19 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         userInfo: action.userInfo
+      }
+    case INIT_SOCKET:
+      return {
+        ...state,
+        socketInstance: action.socketInstance
+      }
+    case CHANGE_NOTIFICATION:
+      return {
+        ...state,
+        userInfo: {
+          ...state.userInfo,
+          ucNotification: action.notification
+        }
       }
     default:
       return state;

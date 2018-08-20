@@ -172,8 +172,12 @@ class Login extends Component {
     .then(res => {
       switch (res.data.msg) {
         case 'success':
-          const { handleLoginSuccess } = this.props;
-          handleLoginSuccess(res.data.data.userInfo);
+          const { handleLoginSuccess, socket } = this.props;
+          const userInfo = res.data.data.userInfo;
+          handleLoginSuccess(userInfo);
+          if (socket) {
+            socket.emit('init', {uid: userInfo.userID});
+          }
         break;
         case 'failed':
           this.changeErrorOptions(['', `输入密码错误，还剩${5 - res.data.data.time}次机会`], [false, true]);
@@ -216,7 +220,7 @@ class Login extends Component {
 
 const mapStateToProps = (state) => ({
   isLogin: state.login.isLogin,
-  loginPageIndex: state.login.loginPageIndex
+  socket: state.login.socketInstance
 })
 
 const mapDispatchToProps = (dispatch) => ({

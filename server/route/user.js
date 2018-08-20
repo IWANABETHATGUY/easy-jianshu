@@ -2,7 +2,7 @@ const Router = require('koa-router');
 const User = require('../model/User.js');
 const Article = require('../model/Article.js');
 const { returnJSON } = require('../utils/retBody');
-
+const Socket = require('../model/Socket');
 const route = new Router();
 
 route.post('/login', async (ctx, next) => {
@@ -98,6 +98,25 @@ route.get('/checkLogin', async(ctx, next) => {
     ctx.body = returnJSON('failed', {});
   }
   
+})
+
+route.get('/updateUcNotification', async (ctx, next) => {
+  ctx.set('Content-Type', 'application/json');
+  const uid = ctx.cookies.get('uid');
+  if (uid) {
+    let resultUser = await User.findOne({
+      _id: uid
+    });
+    if (resultUser !== null) {
+      ctx.body = returnJSON('success', {
+        ucNotification: resultUser.unCheckedNotifications
+      });
+    } else {
+      ctx.body = returnJSON('failed', {});
+    }
+  } else {
+    ctx.body = returnJSON('failed', {});
+  }
 })
 // picList: data.picList,
 //     articleList: data.articleList,
@@ -259,4 +278,8 @@ route.delete('/follow', async (ctx, next) => {
 //     }
 //   })
 // })
+route.get('/test', async (ctx, next) => {
+  let socket = await Socket.deleteOne({socketID: 'aBSMv5iw0eSfvSEqAAAA'});
+  ctx.body = socket;
+})
 module.exports = route;

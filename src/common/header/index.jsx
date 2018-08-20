@@ -26,9 +26,11 @@ import Badge from '@material-ui/core/Badge';
 import { withStyles } from '@material-ui/core/styles';
 import {
   actionCreater as loginActionCreater
-} from '../../pages/login/store'
+} from '../../pages/login/store';
 import { connect } from 'react-redux';
 import DropList from './components/DropList';
+import io from 'socket.io-client';
+import { checkLogin, logout } from './utils';
 
 const styles = theme => ({
   badge: {
@@ -41,11 +43,23 @@ const styles = theme => ({
   }
 })
 class Header extends Component {
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      socket: null,
+    }
+  }
+  
   componentDidMount() {
-    const { handleCheckLogin, initHomeData } = this.props;
+    const { handleCheckLogin, initHomeData, initSocket, updateNotification } = this.props;
     initHomeData();
-    handleCheckLogin();
+    const socket = io.connect('http://localhost:8080');
+    socket.on('update', (data)=> {
+      updateNotification()
+    })
+    handleCheckLogin(socket);
+    initSocket(socket);
+
   }
 
   handlePersonalCenter = () => {
@@ -57,11 +71,12 @@ class Header extends Component {
       focus,
       list,
       userInfo,
+      socketInstance,
       isLogin,
       handleInputFocused,
       handleInputBlur,
       handleLogOut,
-      classes
+      classes,
     } = this.props;
     return  (
       <HeaderWrapper>
@@ -100,7 +115,7 @@ class Header extends Component {
                       icon: '&#xef05;'
                     }
                   ]}
-                  actionList={[this.handlePersonalCenter, handleLogOut]}
+                  actionList={[this.handlePersonalCenter, handleLogOut.bind(this, socketInstance)]}
                 />
               </AvatorContainer>
             )
@@ -151,7 +166,11 @@ class Header extends Component {
               <i className="iconfont">&#xe636;</i>
             </NavItem>
             <NavSearchWrapper>
-              <NavSearch className={focus ? 'focused' : ''} onFocus={handleInputFocused.bind(null, list)} onBlur={handleInputBlur} />
+              <NavSearch 
+                className={focus ? 'focused' : ''} 
+                onFocus={handleInputFocused.bind(null, list)} 
+                onBlur={handleInputBlur}
+                 />
 
               <i className="iconfont theme">&#xe627;</i>
               { this.getSerachArea() }
@@ -163,6 +182,8 @@ class Header extends Component {
 
       </HeaderWrapper>)
   }
+
+
   // 事件处理函数
   getSerachArea = () => {
     const { 
@@ -212,7 +233,8 @@ const mapStateTOProps = (state) => {
     page: state.header.page,
     totalPage: state.header.totalPage,
     isLogin: state.login.isLogin,
-    userInfo: state.login.userInfo
+    userInfo: state.login.userInfo,
+    socketInstance: state.login.socketInstance
   }
 }
 
@@ -245,14 +267,20 @@ const mapDispatchToProps = (dispatch) => {
       }, 200)
       dispatch(action);
     },
-    handleCheckLogin() {
-      dispatch(loginActionCreater.checkLogin());
+    handleCheckLogin(socket) {
+      checkLogin(dispatch, socket)();
     },
-    handleLogOut() {
-      dispatch(loginActionCreater.logout())
+    handleLogOut(socket) {
+      logout(dispatch, socket)();
     },
     initHomeData() {
       dispatch(homeActionCreater.initHomeData());
+    },
+    initSocket(socket) {
+      dispatch(loginActionCreater.initSocket(socket));
+    },
+    updateNotification() {
+      dispatch(loginActionCreater.updateNotification());
     }
   }
 }

@@ -175,6 +175,7 @@ class WriteArticle extends Component {
     return element.innerText;
   }
   publishNewArticle = (markdownContent) => {
+    const { socket } = this.props;
     const summary = this.retSummary(markdownContent).slice(0, 60);
     const {pseudonym, userID} = this.props;
     axios.post(`${HOST}/article/addArticle`, {
@@ -189,6 +190,9 @@ class WriteArticle extends Component {
     })
     .then(res => {
       if (res.data.msg === 'success') {
+        if (socket) {
+          socket.emit('pubArticle');
+        }
         openNotificationWithIcon('success', '成功', '发布新的文章成功');
       } else {
         openNotificationWithIcon('error', '失败', '发布新的文章失败');
@@ -201,6 +205,7 @@ const mapStateToProps = (state) => ({
   isLogin: state.login.isLogin,
   pseudonym: state.login.userInfo.pseudonym,
   userID: state.login.userInfo.userID,
+  socket: state.login.socketInstance
 })
 
 export default connect(mapStateToProps, null)(
