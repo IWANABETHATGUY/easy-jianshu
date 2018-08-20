@@ -31,6 +31,7 @@ import { connect } from 'react-redux';
 import DropList from './components/DropList';
 import io from 'socket.io-client';
 import { checkLogin, logout } from './utils';
+import { HOST } from '../../libs/config';
 
 const styles = theme => ({
   badge: {
@@ -53,7 +54,7 @@ class Header extends Component {
   componentDidMount() {
     const { handleCheckLogin, initHomeData, initSocket, updateNotification } = this.props;
     initHomeData();
-    const socket = io.connect('http://localhost:8080');
+    const socket = io.connect(HOST);
     socket.on('update', (data)=> {
       updateNotification()
     });
