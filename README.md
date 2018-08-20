@@ -31,6 +31,10 @@
 ***订阅后文章推送***
 ![订阅后文章推送](https://github.com/IWANABETHATGUY/easy-jianshu/blob/master/intro/noticeArticle.gif)
 
+
+***socketio推送***
+![socketio推送](https://github.com/IWANABETHATGUY/easy-jianshu/blob/master/intro/socketio.gif)
+
 TODO
 - [ ] 使用typescript重构后端项目，为后端代码提供类型检查，顺便好好学习下typescript
 - [ ] 个人设置模块，提供上传头像，更换头像功能
