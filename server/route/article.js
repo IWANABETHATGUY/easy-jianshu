@@ -15,7 +15,7 @@ router.post('/addArticle', async (ctx, next) => {
     title: body.title,
     tags: body.tags,
     userID: body.userID,
-    summary: body.summary
+    summary: body.summary,
   });
   let resArticle = await article.save();
   if (resArticle !== null) {
@@ -23,7 +23,7 @@ router.post('/addArticle', async (ctx, next) => {
   } else {
     ctx.body = returnJSON('failed', []);
   }
-})
+});
 
 router.get('/articleList', async (ctx, next) => {
   ctx.set('Content-Type', 'application/json');
@@ -31,7 +31,7 @@ router.get('/articleList', async (ctx, next) => {
   page = page ? page : 1;
   let resArticle = await Article.find({}, null, {
     skip: (page - 1) * 5,
-    limit: 5
+    limit: 5,
   });
   if (resArticle.length > 0) {
     ctx.body = returnJSON('success', {
@@ -46,17 +46,16 @@ router.get('/articleList', async (ctx, next) => {
           picUrl: item.picUrl,
           userID: item.userID,
           meta: item.meta,
-          _id: item._id
-        }
-      })
+          _id: item._id,
+        };
+      }),
     });
   } else {
     ctx.body = returnJSON('failed', {
-      articleList: []
+      articleList: [],
     });
   }
-})
-
+});
 
 router.get('/getArticle', async (ctx, next) => {
   ctx.set('Content-Type', 'application/json');
@@ -64,7 +63,7 @@ router.get('/getArticle', async (ctx, next) => {
   let uid = ctx.cookies.get('uid') || '';
   if (!articleId) {
     ctx.body = returnJSON('failed', {
-      article: {}
+      article: {},
     });
     await next();
     return;
@@ -75,15 +74,15 @@ router.get('/getArticle', async (ctx, next) => {
     ctx.body = returnJSON('success', {
       article: {
         ...resArticle._doc,
-        isLiked
-      }
+        isLiked,
+      },
     });
   } else {
     ctx.body = returnJSON('failed', {
-      article: {}
+      article: {},
     });
   }
-})
+});
 
 router.get('/like', async (ctx, next) => {
   ctx.set('Content-Type', 'application/json');
@@ -94,21 +93,23 @@ router.get('/like', async (ctx, next) => {
     await next();
     return;
   }
-  let resArticle = await Article.update({_id: articleId}, {
-    $inc: {
-      like: 1
+  let resArticle = await Article.update(
+    { _id: articleId },
+    {
+      $inc: {
+        like: 1,
+      },
+      $push: {
+        likeList: uid,
+      },
     },
-    $push: {
-      likeList: uid
-    }
-  })
+  );
   if (resArticle !== null) {
     ctx.body = returnJSON('success', {});
   } else {
     ctx.body = returnJSON('failed', {});
   }
-})
-
+});
 
 router.delete('/like', async (ctx, next) => {
   ctx.set('Content-Type', 'application/json');
@@ -119,41 +120,44 @@ router.delete('/like', async (ctx, next) => {
     await next();
     return;
   }
-  let resArticle = await Article.update({_id: articleId}, {
-    $inc: {
-      like: -1
+  let resArticle = await Article.update(
+    { _id: articleId },
+    {
+      $inc: {
+        like: -1,
+      },
+      $pull: {
+        likeList: uid,
+      },
     },
-    $pull: {
-      likeList: uid
-    }
-  });
+  );
   if (resArticle !== null) {
     ctx.body = returnJSON('success', {});
   } else {
     ctx.body = returnJSON('failed', {});
   }
-})
+});
 
 router.get('/getTotalComment', async (ctx, next) => {
   ctx.set('Content-Type', 'application/json');
   let id = ctx.request.query.id;
   if (!id) {
     ctx.body = returnJSON('failed', {
-      total: -1
+      total: -1,
     });
     await next();
   }
   let resArticle = await Article.findById(id);
   if (resArticle !== null) {
     ctx.body = returnJSON('success', {
-      total: resArticle.comment
+      total: resArticle.comment,
     });
   } else {
     ctx.body = returnJSON('failed', {
-      total: -1
+      total: -1,
     });
   }
-})
+});
 
 // router.get('/test', async (ctx, next) => {
 //   const from = ctx.request.query.from;
@@ -161,7 +165,6 @@ router.get('/getTotalComment', async (ctx, next) => {
 //   ctx.body = returnJSON(+User.isFollowed(from, to), {});
 // })
 
-
-// TODO 
+// TODO
 
 module.exports = router;

@@ -140,9 +140,10 @@ User.methods = {
   },
 };
 
-(User.statics.isFollowed = async (author, followerid) => {
+User.statics.isFollowed = async (author, followerid) => {
   return new Promise((resolve, reject) => {
-    resolve(author.followerList.filter(item => item == followerid).length > 0);
+    resolve(author.followerList.filter(item => item === followerid).length > 0);
   });
-}),
-  (module.exports = mongoose.model('User', User, 'users'));
+};
+
+module.exports = mongoose.model('User', User, 'users');

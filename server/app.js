@@ -1,5 +1,8 @@
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
+const koaBody = require('koa-body');
+const koaStatic = require('koa-static');
+const path = require('path');
 const Router = require('./route/index.js');
 const { connect } = require('./model/db');
 const { origin } = require('./utils/config');
@@ -16,6 +19,16 @@ const User = require('./model/User');
 // const io = require('socket.io')(server);
 
 app.use(bodyParser());
+app.use(
+  koaBody({
+    multipart: true,
+    formidable: {
+      maxFieldsSize: 10 * 1024 * 1024,
+      multipart: true,
+    },
+  }),
+);
+app.use(koaStatic(path.resolve(__dirname, './static')));
 
 app.use(async (ctx, next) => {
   ctx.set('Access-Control-Allow-Origin', origin);
@@ -62,18 +75,17 @@ io.on('connection', socket => {
         publisher.followerList.forEach(async item => {
           let followSocket = await SocketModel.findOne({ userID: item });
           if (followSocket) {
-            socket.to(followSocket.socketID.toString()).emit('update');
+            await socket.to(followSocket.socketID.toString()).emit('update');
           }
         });
       }
     }
   });
   socket.on('notify', data => {
-    console.log(data);
     // socket.to(data.socketId).emit('update', {type: 'i update a new article'});
   });
 });
-server.listen('8080', () => {
-  console.log('server listening at 8080');
+server.listen('8000', () => {
+  console.log('server listening at 8000');
 });
 module.exports = app;

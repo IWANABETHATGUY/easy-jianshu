@@ -4,7 +4,8 @@ const Article = require('../model/Article.js');
 const { returnJSON } = require('../utils/retBody');
 const Socket = require('../model/Socket');
 const route = new Router();
-
+const fs = require('fs');
+const path = require('path');
 route.post('/login', async (ctx, next) => {
   ctx.set('Content-Type', 'application/json');
   const body = ctx.request.body;
@@ -296,6 +297,52 @@ route.delete('/follow', async (ctx, next) => {
   }
 });
 
+route.post('/avatar', async (ctx, next) => {
+  let body = ctx.request;
+  let file = body.files.file;
+  if (!fs.existsSync(path.resolve(__dirname, '../static/avatar'))) {
+    fs.mkdirSync(path.resolve(__dirname, '../static/avatar'));
+  }
+  try {
+    let username = ctx.cookies.get('user');
+    let uid = ctx.cookies.get('uid');
+    const reader = fs.createReadStream(file.path);
+    // 获取上传文件扩展名
+    // 创建可写流
+    let filePath = path.join(__dirname, '../static/avatar', username) + '.jpg';
+    let avatarPath = `http://localhost:8000/avatar/${username}.jpg`;
+    const upStream = fs.createWriteStream(filePath);
+    // 可读流通过管道写入可写流
+    await reader.pipe(upStream);
+    let user = await User.findById(uid, err => {
+      ctx.body = returnJSON('failed', {
+        err: 'no user id',
+      });
+    });
+    if (user) {
+      await user.update(
+        {
+          $set: {
+            avatar: avatarPath,
+          },
+        },
+        err => {
+          if (err) {
+            ctx.body = returnJSON('failed', {
+              err,
+            });
+          }
+        },
+      );
+    }
+
+    ctx.body = returnJSON('success', {});
+  } catch (err) {
+    ctx.body = returnJSON('failed', {
+      err,
+    });
+  }
+});
 // route.get('/init', async (ctx, next) => {
 //   await User.updateMany({}, {
 //     $pull: {
