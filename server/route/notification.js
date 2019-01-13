@@ -10,7 +10,7 @@ const Notification = require('../model/Notification');
 const getNotificationList = (type, notificationList) => {
   let promiseList = [];
   switch (type) {
-    case 'article': 
+    case 'article':
       promiseList = notificationList.map(async (item, index) => {
         const notification = await Notification.findById(item.id);
         const article = await Article.findById(notification.contentId);
@@ -20,13 +20,12 @@ const getNotificationList = (type, notificationList) => {
             title: article.title,
             meta: article.meta,
             _id: article._id,
-            cid: item.id
-          }
+            cid: item.id,
+          };
         } else {
-          return {}
+          return {};
         }
-        
-      })
+      });
       break;
     case 'acomment':
       promiseList = notificationList.map(async (item, index) => {
@@ -35,15 +34,15 @@ const getNotificationList = (type, notificationList) => {
         let article = comment ? await Article.findById(comment.ArticleID) : null;
         return await {
           type: 'acomment',
-          pseudonym: comment ? comment.pseudonym : "",
-          title: article ? article.title : "",
-          articleId: article ? article._id : "",
-          content: comment ? comment.content : "",
+          pseudonym: comment ? comment.pseudonym : '',
+          title: article ? article.title : '',
+          articleId: article ? article._id : '',
+          content: comment ? comment.content : '',
           meta: comment ? comment.meta : {},
-          _id: comment ? comment._id : "",
-          cid: item.id
-        }
-      })
+          _id: comment ? comment._id : '',
+          cid: item.id,
+        };
+      });
       break;
     case 'ccomment':
       promiseList = notificationList.map(async (item, index) => {
@@ -59,14 +58,16 @@ const getNotificationList = (type, notificationList) => {
           rcontent: rcomment.content,
           meta: comment.meta,
           _id: comment._id,
-          cid: item.id // cid 是通知的id
-        }
-      })
-    break;
+          cid: item.id, // cid 是通知的id
+        };
+      });
+      break;
+    default:
+      break;
   }
 
   return Promise.all(promiseList);
-}
+};
 
 router.get('/list', async (ctx, next) => {
   ctx.set('Content-Type', 'application/json');
@@ -79,17 +80,16 @@ router.get('/list', async (ctx, next) => {
   }
   const ucTypeNotifications = (await User.findById(uid)).unCheckedNotifications.filter(item => item.type === type);
   if (ucTypeNotifications.length) {
-      let notificationList = await getNotificationList(type, ucTypeNotifications);
-      ctx.body = returnJSON('success', {
-        list: notificationList
-      });
+    let notificationList = await getNotificationList(type, ucTypeNotifications);
+    ctx.body = returnJSON('success', {
+      list: notificationList,
+    });
   } else {
     ctx.body = returnJSON('failed', {
-      list: []
+      list: [],
     });
   }
-
-})
+});
 
 router.get('/checked', async (ctx, next) => {
   ctx.set('Content-Type', 'application/json');
@@ -100,19 +100,20 @@ router.get('/checked', async (ctx, next) => {
     await next();
     return;
   }
-  const resUser = (await User.findById(uid));
+  const resUser = await User.findById(uid);
   if (resUser !== null) {
     const checkedItem = resUser.unCheckedNotifications.filter(item => item.id == contentId)[0];
     if (checkedItem) {
       await resUser.update({
         $pull: {
           unCheckedNotifications: {
-            id: ObjectId(contentId)
-          }
-        }, $push: {
-          checkedNotifications: checkedItem
-        }
-      })
+            id: ObjectId(contentId),
+          },
+        },
+        $push: {
+          checkedNotifications: checkedItem,
+        },
+      });
       ctx.body = returnJSON('success', {});
     } else {
       ctx.body = returnJSON('failed', {});
@@ -120,7 +121,6 @@ router.get('/checked', async (ctx, next) => {
   } else {
     ctx.body = returnJSON('failed', {});
   }
-
-})
-// 
+});
+//
 module.exports = router;

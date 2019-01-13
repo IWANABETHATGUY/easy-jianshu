@@ -1,23 +1,23 @@
 const Router = require('koa-router');
-const ObjectId = require('mongoose').Types.ObjectId;
+// const ObjectId = require('mongoose').Types.ObjectId;
 const Comment = require('../model/Comment');
 const { returnJSON } = require('../utils/retBody');
 const router = new Router();
 
-const getReplyList = (replyList) => {
+const getReplyList = replyList => {
   let replyPromiseList = replyList.map(id => {
     return new Promise((resolve, reject) => {
-      Comment.findOne({_id: id})
+      Comment.findOne({ _id: id })
         .then(res => {
-          resolve(res)
+          resolve(res);
         })
         .catch(err => {
           reject(err);
-        })
-    })
+        });
+    });
   });
   return Promise.all(replyPromiseList);
-}
+};
 
 router.post('/addComment', async (ctx, next) => {
   ctx.set('Content-Type', 'application/json');
@@ -39,7 +39,7 @@ router.post('/addComment', async (ctx, next) => {
   } else {
     ctx.body = returnJSON('failed', []);
   }
-})
+});
 
 router.get('/commentList', async (ctx, next) => {
   ctx.set('Content-Type', 'application/json');
@@ -47,19 +47,19 @@ router.get('/commentList', async (ctx, next) => {
   let articleId = ctx.request.query.id;
   if (!articleId) {
     ctx.body = returnJSON('no articleId', {
-      commentList: []
+      commentList: [],
     });
     await next();
   }
   page = page ? page : 1;
-  let resComment = await Comment.find({ArticleID: articleId, replyToC: false}, null, {
+  let resComment = await Comment.find({ ArticleID: articleId, replyToC: false }, null, {
     skip: (page - 1) * 10,
-    limit: 10
+    limit: 10,
   });
-  
+
   if (resComment.length > 0) {
-    let commentList =  await resComment.map(async item => {
-      return  {
+    let commentList = await resComment.map(async item => {
+      return {
         pseudonym: item.pseudonym,
         content: item.content,
         like: item.like,
@@ -68,22 +68,20 @@ router.get('/commentList', async (ctx, next) => {
         commentReplyList: await getReplyList(item.replyList.slice(0, 10)),
         meta: item.meta,
         _id: item._id,
-        underCommentID: item.underCommentID
-      }
+        underCommentID: item.underCommentID,
+      };
     });
-    
+
     let res = await Promise.all(commentList);
     ctx.body = returnJSON('success', {
-      commentList: res
+      commentList: res,
     });
   } else {
     ctx.body = returnJSON('failed', {
-      commentList: []
+      commentList: [],
     });
   }
-})
-
-
+});
 
 // router.get('/getArticle', async (ctx, next) => {
 //   ctx.set('Content-Type', 'application/json');
@@ -113,16 +111,16 @@ router.get('/commentList', async (ctx, next) => {
 router.delete('/delete', async (ctx, next) => {
   const id = ctx.request.query.id;
   if (!id) {
-    ctx.body = returnJSON('failed', {})
+    ctx.body = returnJSON('failed', {});
     await next();
   }
   let resComment = await Comment.findById(id);
   await resComment.remove();
   if (resComment !== null) {
-    ctx.body = returnJSON('success', {})
+    ctx.body = returnJSON('success', {});
   } else {
-    ctx.body = returnJSON('failed', {})
+    ctx.body = returnJSON('failed', {});
   }
-})
+});
 
 module.exports = router;
