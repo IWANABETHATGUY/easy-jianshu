@@ -13,33 +13,29 @@ import Person from './pages/person';
 import 'react-placeholder/lib/ReactPlaceholder';
 import 'antd/dist/antd.css';
 import ScrollToTop from './common/ScrollToTop';
-const NotMatch = (props) => {
-  return (
-    <div>404</div>
-  )
-}
+const NotMatch = () => <div>404</div>;
 class App extends Component {
   render() {
     return (
-      <div className='App'>
+      <div className="App">
         <Provider store={store}>
           <BrowserRouter>
             <ScrollToTop>
               <Fragment>
-                <Header style={{position: 'fixed'}}/> 
-                <div style={{marginTop: '58px'}}>
+                <Header style={{ position: 'fixed' }} />
+                <div style={{ marginTop: '58px' }}>
                   <Switch>
-                    <Route path="/" exact component={Home}/>
-                    <Route path="/detail/:id" exact component={Detail}/>
-                    <Route path="/login" exact component={Login}/>
-                    <Route path="/writeArticle" exact component={WriteArticle}/>
-                    <Route path="/notification" component={Notification}/>
-                    <Route path="/signin" exact component={Sign}/>
-                    <Route path="/user/personalCenter" component={Person}/>
-                    <Route path="*" component={NotMatch}/>  
+                    <Route path="/" exact component={Home} />
+                    <Route path="/detail/:id" exact component={Detail} />
+                    <Route path="/login" exact component={Login} />
+                    <Route path="/writeArticle" exact component={WriteArticle} />
+                    <Route path="/notification" component={Notification} />
+                    <Route path="/signin" exact component={Sign} />
+                    <Route path="/user/personalCenter" component={Person} />
+                    <Route path="*" component={NotMatch} />
                   </Switch>
                 </div>
-              </Fragment> 
+              </Fragment>
             </ScrollToTop>
           </BrowserRouter>
         </Provider>
@@ -47,8 +43,5 @@ class App extends Component {
     );
   }
 }
-
-
-
 
 export default App;

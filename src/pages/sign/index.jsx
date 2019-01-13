@@ -3,13 +3,7 @@ import axios from 'axios';
 import { HOST } from '../../libs/config';
 import { connect } from 'react-redux';
 import { Redirect, withRouter } from 'react-router-dom';
-import { 
-  LoginWrapper,
-  LoginBox,
-  TabList,
-  TabListItem,
-  TabPageBox
-} from './style';
+import { LoginWrapper, LoginBox, TabList, TabListItem, TabPageBox } from './style';
 import FormControl from '@material-ui/core/FormControl';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -18,9 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import FormHelperText from '@material-ui/core/FormHelperText';
 
-
 class SignIn extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -28,62 +20,57 @@ class SignIn extends Component {
         {
           tag: '登录',
           active: false,
-          url: '/login'
-        }, 
+          url: '/login',
+        },
         {
           tag: '注册',
           active: true,
-          url: '/signIn'
-        },],
+          url: '/signIn',
+        },
+      ],
       showPassword: false,
       showConfirmPassword: false,
       userName: '',
       password: '',
       confirmPassword: '',
       errorText: ['', '', ''],
-      errorStatus: [false, false, false]
-    }
+      errorStatus: [false, false, false],
+    };
   }
 
   handleChange = props => event => {
     this.setState({
-      [props]: event.target.value
+      [props]: event.target.value,
     });
-  }
+  };
 
   render() {
-    const { 
-      isLogin,
-    } = this.props;
-    const {
-      pageItemList
-    } = this.state;
-    return isLogin ? <Redirect to="/"/> : (
+    const { isLogin } = this.props;
+    const { pageItemList } = this.state;
+    return isLogin ? (
+      <Redirect to="/" />
+    ) : (
       <LoginWrapper>
         <LoginBox>
           <TabList>
-            {
-              pageItemList.map((item, index) => {
-                return (
-                  <Fragment
-                    key={index}
+            {pageItemList.map((item, index) => {
+              return (
+                <Fragment key={index}>
+                  <TabListItem
+                    className={item.active ? 'active' : ''}
+                    onClick={() => {
+                      this.handleTabListItemClick(item.url);
+                    }}
                   >
-                    <TabListItem
-                      className={ item.active ? 'active' : ''}
-                      onClick={() => {this.handleTabListItemClick(item.url)}}
-                    >
-                      {item.tag}
-                    </TabListItem>
-                    {index !== pageItemList.length - 1 ? <b>·</b> : null}
-                  </Fragment>
-                )
-                
-              })
-            }
+                    {item.tag}
+                  </TabListItem>
+                  {index !== pageItemList.length - 1 ? <b>·</b> : null}
+                </Fragment>
+              );
+            })}
           </TabList>
-          <TabPageBox 
-            className="box">
-            <FormControl style={{width:'250px', marginBottom: '10px'}}>
+          <TabPageBox className="box">
+            <FormControl style={{ width: '250px', marginBottom: '10px' }}>
               {/* className={classNames(classes.margin, classes.textField)} */}
               <InputLabel htmlFor="adornment-user">用户名</InputLabel>
               <Input
@@ -93,10 +80,14 @@ class SignIn extends Component {
                 onChange={this.handleChange('userName')}
                 onFocus={this.handleInputFocus}
               />
-              <FormHelperText className="error" style={{visibility: this.state.errorStatus[0] ? 'visible' : 'hidden'}}>{this.state.errorText[0]}</FormHelperText>
-              
+              <FormHelperText
+                className="error"
+                style={{ visibility: this.state.errorStatus[0] ? 'visible' : 'hidden' }}
+              >
+                {this.state.errorText[0]}
+              </FormHelperText>
             </FormControl>
-            <FormControl style={{width:'250px', marginBottom: '10px'}}>
+            <FormControl style={{ width: '250px', marginBottom: '10px' }}>
               {/* className={classNames(classes.margin, classes.textField)} */}
               <InputLabel htmlFor="adornment-password">密码</InputLabel>
               <Input
@@ -112,19 +103,23 @@ class SignIn extends Component {
                       aria-label="Toggle password visibility"
                       onClick={this.handleToggleShowPassword('showPassword')}
                     >
-                    <i className="iconfont" 
-                      style={{fontSize: '20px'}} 
-                      dangerouslySetInnerHTML={{__html: this.state.showPassword ? '&#xe724;' : '&#xe723;'}}
-                    >
-                    </i>
+                      <i
+                        className="iconfont"
+                        style={{ fontSize: '20px' }}
+                        dangerouslySetInnerHTML={{ __html: this.state.showPassword ? '&#xe724;' : '&#xe723;' }}
+                      />
                     </IconButton>
                   </InputAdornment>
                 }
               />
-              <FormHelperText className="error" style={{visibility: this.state.errorStatus[1] ? 'visible' : 'hidden'}}>{this.state.errorText[1]}</FormHelperText>
-
+              <FormHelperText
+                className="error"
+                style={{ visibility: this.state.errorStatus[1] ? 'visible' : 'hidden' }}
+              >
+                {this.state.errorText[1]}
+              </FormHelperText>
             </FormControl>
-            <FormControl style={{width:'250px', marginBottom: '30px'}}>
+            <FormControl style={{ width: '250px', marginBottom: '30px' }}>
               {/* className={classNames(classes.margin, classes.textField)} */}
               <InputLabel htmlFor="adornment-confirmPassword">确认密码</InputLabel>
               <Input
@@ -141,97 +136,91 @@ class SignIn extends Component {
                       aria-label="Toggle password visibility"
                       onClick={this.handleToggleShowPassword('showConfirmPassword')}
                     >
-                    <i className="iconfont" 
-                      style={{fontSize: '20px'}} 
-                      dangerouslySetInnerHTML={{__html: this.state.showConfirmPassword ? '&#xe724;' : '&#xe723;'}}
-                    >
-                    </i>
+                      <i
+                        className="iconfont"
+                        style={{ fontSize: '20px' }}
+                        dangerouslySetInnerHTML={{ __html: this.state.showConfirmPassword ? '&#xe724;' : '&#xe723;' }}
+                      />
                     </IconButton>
                   </InputAdornment>
                 }
               />
-              <FormHelperText className="error" style={{visibility: this.state.errorStatus[2] ? 'visible' : 'hidden'}}>{this.state.errorText[2]}</FormHelperText>
-
-            </FormControl>
-            <FormControl style={{width: '200px'}}>
-              <Button variant="contained" color="primary" 
-                onClick={this.handleClickSignIn}
+              <FormHelperText
+                className="error"
+                style={{ visibility: this.state.errorStatus[2] ? 'visible' : 'hidden' }}
               >
+                {this.state.errorText[2]}
+              </FormHelperText>
+            </FormControl>
+            <FormControl style={{ width: '200px' }}>
+              <Button variant="contained" color="primary" onClick={this.handleClickSignIn}>
                 注册
               </Button>
-
             </FormControl>
           </TabPageBox>
-          
         </LoginBox>
       </LoginWrapper>
     );
-
-    
   }
 
   handleSignIn = () => {
     if (this.validate()) {
       const { userName, password } = this.state;
-      axios.post(`${HOST}/user/signIn`, {
-        username: userName,
-        password
-      })
-      .then(res => {
-        switch(res.data.msg) {
-          case 'success':
-            const { history } = this.props;
-            history.push('/login');
-          break;
-          case 'failed':
-            this.changeErrorOptions(
-              ['', '', '注册失败'],
-              [false, false, true]
-            );
-          break;
-          case 'registered':
-            this.changeErrorOptions(
-              ['', '', '该账号已经被注册'],
-              [false, false, true]
-            );
-          break;
-        }
-      }) 
+      axios
+        .post(`${HOST}/user/signIn`, {
+          username: userName,
+          password,
+        })
+        .then(res => {
+          switch (res.data.msg) {
+            case 'success':
+              const { history } = this.props;
+              history.push('/login');
+              break;
+            case 'failed':
+              this.changeErrorOptions(['', '', '注册失败'], [false, false, true]);
+              break;
+            case 'registered':
+              this.changeErrorOptions(['', '', '该账号已经被注册'], [false, false, true]);
+              break;
+            default:
+              break;
+          }
+        });
     }
-    
-  }
-  
+  };
+
   handleClickSignIn = () => {
     this.handleSignIn();
-  }
+  };
 
   handleInputFocus = () => {
     this.changeErrorOptions(['', '', ''], [false, false, false]);
-  }
+  };
 
-  handleTabListItemClick = (url) => {
+  handleTabListItemClick = url => {
     const { match, history } = this.props;
     if (match.url !== url) {
       history.push(url);
     }
-  }
+  };
   handleToggleShowPassword = props => () => {
     this.setState({
-      [props]: !this.state[props]
+      [props]: !this.state[props],
     });
-  }
-  handleSignInKeyDown = (e) => {
+  };
+  handleSignInKeyDown = e => {
     if (e.keyCode === 13) {
       this.handleSignIn();
     }
-  }
+  };
 
   changeErrorOptions = (texts, status) => {
     this.setState({
       errorText: texts,
-      errorStatus: status
-    })
-  }
+      errorStatus: status,
+    });
+  };
 
   validate = () => {
     const { userName, password, confirmPassword } = this.state;
@@ -260,13 +249,14 @@ class SignIn extends Component {
     }
     this.changeErrorOptions(texts, status);
     return pass;
-  }
+  };
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   isLogin: state.login.isLogin,
-})
+});
 
-export default connect(mapStateToProps, null)(
-  withRouter(SignIn)
-);
+export default connect(
+  mapStateToProps,
+  null,
+)(withRouter(SignIn));
