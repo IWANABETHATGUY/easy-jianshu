@@ -2,20 +2,20 @@ import styled from 'styled-components';
 import logoPic from '../../static/logo.png';
 
 export const HeaderWrapper = styled.div`
-position: fixed;
-z-index: 999;
-width: 100%;
-top: 0;
-height: 58px;
-border-bottom: 1px solid #f0f0f0;
-background: #fff;
-box-sizing: border-box;
-`
+  position: fixed;
+  z-index: 999;
+  width: 100%;
+  top: 0;
+  height: 58px;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fff;
+  box-sizing: border-box;
+`;
 export const HeaderBox = styled.div`
   max-width: 1440px;
   height: 100%;
   margin: 0 auto;
-`
+`;
 
 export const Logo = styled.div`
   float: left;
@@ -23,14 +23,14 @@ export const Logo = styled.div`
   height: 56px;
   background: url(${logoPic});
   background-size: contain;
-`
+`;
 
 export const Nav = styled.div`
   width: 960px;
   height: 100%;
   margin: 0 auto;
   box-sizing: border-box;
-`
+`;
 
 export const NavItem = styled.div`
   height: 100%;
@@ -56,14 +56,14 @@ export const NavItem = styled.div`
   &.download:hover {
     background: #ccc;
   }
-`
+`;
 
 export const NavSearch = styled.input.attrs({
-  placeholder: '搜索'
+  placeholder: '搜索',
 })`
   width: 200px;
-  height:38px;
-  margin: 9px 0 0 20px ;
+  height: 38px;
+  margin: 9px 0 0 20px;
   padding: 0 35px 0 20px;
   font-size: 14px;
   box-sizing: border-box;
@@ -78,7 +78,7 @@ export const NavSearch = styled.input.attrs({
   &.focused + .iconfont {
     background: #ccc;
   }
-`
+`;
 
 export const SearchInfo = styled.div`
   position: absolute;
@@ -102,7 +102,7 @@ export const SearchInfo = styled.div`
     border-right: 10px solid transparent;
     box-shadow: 0 0 0 rgba(0, 0, 0, 0.2);
   }
-`
+`;
 export const SearchInfoTitle = styled.div`
   margin-top: 20px;
   margin-bottom: 15px;
@@ -111,7 +111,7 @@ export const SearchInfoTitle = styled.div`
   color: #969696;
   user-select: none;
   cursor: pointer;
-`
+`;
 
 export const SearchInfoSwitch = styled.span`
   float: right;
@@ -122,14 +122,13 @@ export const SearchInfoSwitch = styled.span`
     margin-right: 2px;
     transform: rotate(0deg);
     transform-origin: center center;
-    transition: all 0s ;
-    
+    transition: all 0s;
   }
   .active {
     transform: rotate(360deg);
-    transition: all .2s ease-in-out;
+    transition: all 0.2s ease-in-out;
   }
-`
+`;
 
 export const SearchInfoItem = styled.a`
   display: inline-block;
@@ -141,7 +140,7 @@ export const SearchInfoItem = styled.a`
   margin-right: 10px;
   margin-bottom: 15px;
   border-raduis: 2px;
-`
+`;
 
 export const Button = styled.a`
   float: right;
@@ -154,11 +153,11 @@ export const Button = styled.a`
   &.register {
     color: #ec6149;
   }
-  &.write-article{
+  &.write-article {
     color: #fff;
     background: #ec6149;
   }
-`
+`;
 export const WriteArticle = styled.div`
   float: right;
   margin: 9px 20px 0 0;
@@ -169,8 +168,7 @@ export const WriteArticle = styled.div`
   font-size: 14px;
   color: #fff;
   background: #ec6149;
-
-`
+`;
 
 export const NavSearchWrapper = styled.div`
   position: relative;
@@ -184,8 +182,7 @@ export const NavSearchWrapper = styled.div`
     border-radius: 15px;
     text-align: center;
   }
-  
-`
+`;
 
 export const AvatorContainer = styled.div`
   position: relative;
@@ -220,7 +217,7 @@ export const AvatorContainer = styled.div`
     min-width: 160px;
   }
   .drop-list-item {
-    padding-left:40px;
+    padding-left: 40px;
     font-size: 14px;
     font-weight: 400;
     color: #222;
@@ -230,4 +227,4 @@ export const AvatorContainer = styled.div`
       background: #f5f5f5;
     }
   }
-`
+`;

@@ -48,12 +48,12 @@ class Header extends Component {
   componentDidMount() {
     const { handleCheckLogin, initHomeData, initSocket, updateNotification } = this.props;
     initHomeData();
-    const socket = io.connect(HOST);
-    socket.on('update', data => {
-      updateNotification();
-    });
-    handleCheckLogin(socket);
-    initSocket(socket);
+    // const socket = io.connect(HOST);
+    // socket.on('update', data => {
+    //   updateNotification();
+    // });
+    handleCheckLogin();
+    // initSocket(socket);
   }
   shouldComponentUpdate(nextProps) {
     const { userInfo } = this.props;
@@ -89,21 +89,22 @@ class Header extends Component {
     return (
       <HeaderWrapper>
         <HeaderBox>
-          <Logo>
-            <Link to="/" />
-          </Logo>
-
-          <WriteArticle className="write-article">
-            <i className="iconfont pen">&#xe6a4;</i>
-            写文章
-            <Link to="/writeArticle" />
-          </WriteArticle>
+          <Link to="/">
+            <Logo />
+          </Link>
+          <Link to="/writeArticle">
+            {' '}
+            <WriteArticle className="write-article">
+              <i className="iconfont pen">&#xe6a4;</i>
+              写文章
+            </WriteArticle>
+          </Link>
 
           {!isLogin ? (
-            <Button className="register">
-              注册
-              <Link to="signIn" />
-            </Button>
+            <Link to="signIn">
+              {' '}
+              <Button className="register">注册</Button>
+            </Link>
           ) : (
             <AvatorContainer>
               <img src={userInfo.avatar} alt="" />
@@ -126,18 +127,19 @@ class Header extends Component {
             </AvatorContainer>
           )}
           {!isLogin && (
-            <NavItem className="right active" to="/login">
-              登录
-              <Link to="/login" />
-            </NavItem>
+            <Link to="/login">
+              <NavItem className="right active" to="/login">
+                登录
+              </NavItem>
+            </Link>
           )}
           <Nav>
             {!isLogin ? (
               <Fragment>
-                <NavItem className="left active">
-                  首页
-                  <Link to="/" />
-                </NavItem>
+                <Link to="/">
+                  <NavItem className="left active">首页</NavItem>
+                </Link>
+
                 <NavItem className="left download">下载App</NavItem>
               </Fragment>
             ) : (
@@ -222,7 +224,7 @@ class Header extends Component {
   };
 }
 
-const mapStateTOProps = state => {
+const mapStateToProps = state => {
   return {
     focus: state.header.focus,
     list: state.header.list,
@@ -282,6 +284,6 @@ const mapDispatchToProps = dispatch => {
   };
 };
 export default connect(
-  mapStateTOProps,
+  mapStateToProps,
   mapDispatchToProps,
 )(withRouter(withStyles(styles)(Header)));

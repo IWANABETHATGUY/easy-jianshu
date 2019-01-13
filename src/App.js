@@ -12,6 +12,7 @@ import Notification from './pages/notification';
 import Person from './pages/person';
 import 'react-placeholder/lib/ReactPlaceholder';
 import 'antd/dist/antd.css';
+import 'react-image-crop/dist/ReactCrop.css';
 import ScrollToTop from './common/ScrollToTop';
 const NotMatch = () => <div>404</div>;
 class App extends Component {

@@ -6,13 +6,14 @@ import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import { HOST } from '../../../../libs/config';
 import ReactPlaceholder from 'react-placeholder';
+import Empty from 'antd/es/empty';
 
 const styles = theme => ({
   replayComment: {
-    display: 'flex', 
-    margin: '10px 10px 0 10px', 
+    display: 'flex',
+    margin: '10px 10px 0 10px',
     alignItems: 'flex-start',
-    padding: '5px'
+    padding: '5px',
   },
   replayCommentAvatar: {
     width: '30px',
@@ -20,61 +21,61 @@ const styles = theme => ({
   },
   replayCommentBox: {
     marginLeft: '10px',
-    fontSize: '16px'
+    fontSize: '16px',
   },
   replayCommentContainer: {
     padding: '0 10px',
-    wordBreak: 'break-word'
+    wordBreak: 'break-word',
   },
   replayCommentInfoContainer: {
     position: 'relative',
-    display: 'flex', 
+    display: 'flex',
     margin: '0 10px 0 10px',
     alignItems: 'center',
-    padding: '5px'
+    padding: '5px',
   },
-})
+});
 
 class Follow extends Component {
   state = {
     followInfoList: [],
-    listLoading: false
-  }
+    listLoading: false,
+  };
 
   componentDidMount() {
     this.setState({
-      listLoading: true
-    })
-    axios.get(`${HOST}/notification/list?type=article`, {
-      withCredentials: true
-    })
+      listLoading: true,
+    });
+    axios
+      .get(`${HOST}/notification/list?type=article`, {
+        withCredentials: true,
+      })
       .then(res => {
         if (res.data.msg === 'success') {
           this.setState({
-            followInfoList: res.data.data.list
-          })
+            followInfoList: res.data.data.list,
+          });
         }
         this.setState({
-          listLoading: false
-        })
-      })
+          listLoading: false,
+        });
+      });
   }
   render() {
     const { classes } = this.props;
     const { followInfoList, listLoading } = this.state;
     return (
       <div>
-        <div style={{fontWeight: 'bold', marginBottom: '20px', fontSize: '14px'}}>全部关注</div>
-        {
-          listLoading ? (
-            <ReactPlaceholder type="media" rows={4}  ready={false} showLoadingAnimation={true}>
-              {''}
-            </ReactPlaceholder>
-          ) : (
-            <List>
-              { followInfoList.map((item, index) => (
+        <div style={{ fontWeight: 'bold', marginBottom: '20px', fontSize: '14px' }}>全部关注</div>
+        {listLoading ? (
+          <ReactPlaceholder type="media" rows={4} ready={false} showLoadingAnimation={true}>
+            {''}
+          </ReactPlaceholder>
+        ) : followInfoList.length ? (
+          <List>
+            {followInfoList.map((item, index) => (
               <div key={index}>
-                <Divider/>
+                <Divider />
                 <div className={classes.replayComment}>
                   <Avatar component="a" className={classes.replayCommentAvatar}>
                     <i className="iconfont">&#xe6a4;</i>
@@ -82,27 +83,30 @@ class Follow extends Component {
                   <div className={classes.replayCommentBox}>
                     <a className="user-name">{item.pseudonym}</a>
                     <span className={classes.replayCommentContainer}> 发布了新的文章 </span>
-                    <a className={classes.articleTitle} href={`/detail/${item._id}`} target="_blank" onClick={this.handleCheckNotification.bind(this,
-                      item.cid)}>{`《${item.title}》`}</a>
+                    <a
+                      className={classes.articleTitle}
+                      href={`/detail/${item._id}`}
+                      target="_blank"
+                      onClick={this.handleCheckNotification.bind(this, item.cid)}
+                    >{`《${item.title}》`}</a>
                   </div>
                 </div>
                 <div className={classes.replayCommentInfoContainer}>{item.meta.createdAt}</div>
               </div>
-              )) }
-
-            </List>
-          )
-        }
-        
+            ))}
+          </List>
+        ) : (
+          <Empty description="没有新消息" />
+        )}
       </div>
     );
   }
 
-  handleCheckNotification = (id) => {
+  handleCheckNotification = id => {
     axios.get(`${HOST}/notification/checked?cid=${id}`, {
-      withCredentials: true
-    })
-  }
+      withCredentials: true,
+    });
+  };
 }
 
 export default withStyles(styles)(Follow);
