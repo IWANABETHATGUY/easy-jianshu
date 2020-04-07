@@ -5,7 +5,6 @@
 > 后端: koa2+mongoose+koa-router  
 > 数据库： mongodb   
 
-[线上地址](http://47.94.4.230)
 
 ***首页***
 ![首页](https://github.com/IWANABETHATGUY/easy-jianshu/blob/master/intro/homePage.gif)
