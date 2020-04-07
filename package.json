@@ -42,7 +42,7 @@
     "rc-pagination": "^1.16.5",
     "react": "^16.4.1",
     "react-dev-utils": "^5.0.2",
-    "react-dom": "^16.4.1",
+    "react-dom": "^16.4.2",
     "react-image-crop": "^6.0.11",
     "react-loadable": "^5.4.0",
     "react-placeholder": "^3.0.1",
